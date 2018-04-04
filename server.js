@@ -10,9 +10,9 @@ app.use(express.static('public'));
 
 app.use(express.urlencoded());
 
-const mongoose = require('mongoose');
+const mediaAPI = require('./routes/media.js');
 
-mongoose.connect(process.env.MONGODB_URI);
+app.use('/api/media', mediaAPI);
 
 app.listen(process.env.PORT, () => {
     console.log(`listening in at http://localhost:${process.env.PORT}`);
