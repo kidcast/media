@@ -16,7 +16,7 @@ const mongoose = require('mongoose');
 
 mongoose.connect(process.env.MONGODB_URI);
 
-const basicAuth = require('./routes/basic-auth-route.js');
+const basicAuth = require('./routers/basic-auth-route.js');
 app.use('/', basicAuth);
 
 app.listen(process.env.PORT, () => {
