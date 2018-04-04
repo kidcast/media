@@ -28,10 +28,16 @@ mongoose.connect(DATABASE_URL);
 const router = express.Router();
 
 router.get('/', (req, res) => {
-  Media.find().then(media => {
-    res.send(media);
-  })
-})
+  if (req.query.id) {
+    Media.findOne({ _id: req.query.id }, (err, media) => {
+      res.send(media);
+    });
+  } else {
+    Media.find().then(media => {
+      res.send(media);
+    });
+  }
+});
 
 router.post('/', upload.single('media'), function (req, res) {
   let ext = path.extname(req.file.originalname);
@@ -57,5 +63,26 @@ router.post('/', upload.single('media'), function (req, res) {
       });
   });
 });
+
+router.put('/', function (req, res) {
+  Media.findOneAndUpdate({_id: req.query.id}, {
+    title: req.body.title,
+    description: req.body.description,
+    category: req.body.category,
+    type: req.body.type
+  }, (err, media) => {
+    Media.findOne({_id: req.query.id}).then(media => {
+      res.send(media);
+    });
+  });
+});
+
+router.delete('/', function (req, res) {
+  Media.remove({_id: req.query.id}, (err, media) => {
+    res.status(204);
+    res.send('Deleted Successfully');
+  });
+});
+
 
 module.exports = router;
