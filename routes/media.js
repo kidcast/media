@@ -77,4 +77,12 @@ router.put('/', function (req, res) {
   });
 });
 
+router.delete('/', function (req, res) {
+  Media.remove({_id: req.query.id}, (err, media) => {
+    res.status(204);
+    res.send('Deleted Successfully');
+  });
+});
+
+
 module.exports = router;
