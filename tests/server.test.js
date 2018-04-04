@@ -5,21 +5,22 @@ require('dotenv').config();
 const superagent = require('superagent');
 
 describe('Media requests', () => {
-  function seed() {
-    let mediaLocation = './uploads/kidCast.png';
-    let uploadUrl = 'http://localhost:3000/api/media/';
-    superagent.post(uploadUrl)
-      .attach('media', mediaLocation)
-      .end((err, res) => {
-        let amazonUrl = process.env.AWS_BUCKET + '.s3-us-west-2.amazonaws.com';
-        let isAmazonUrl = res.body.imageUrl.includes(amazonUrl);
-        res.send(isAmazonUrl);
-      });
-  }
+  // function seed() {
+  //   let mediaLocation = './uploads/kidCast.png';
+  //   let uploadUrl = 'http://localhost:3000/api/media/';
+  //   superagent.post(uploadUrl)
+  //     .attach('media', mediaLocation)
+  //     .end((err, res) => {
+  //       let amazonUrl = process.env.AWS_BUCKET + '.s3-us-west-2.amazonaws.com';
+  //       let isAmazonUrl = res.body.imageUrl.includes(amazonUrl);
+  //       res.send(isAmazonUrl);
+  //     });
+  // }
 
   it('should return 200 for uploading a photo and include proper AWS url', done => {
     let mediaLocation = './uploads/kidMusic.png';
-    let uploadUrl = 'http://localhost:3000/api/media/';
+    let uploadUrl = `${process.env.DATABASE_URL}${process.env.PORT}/api/media/`;
+    console.log('upload url', uploadUrl);
     let newMedia = {
       title: `Test Title: ${Math.random()}`,
       description: `Test Description: ${Math.random()}`,

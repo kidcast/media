@@ -20,5 +20,5 @@ const basicAuth = require('./routes/basic-auth-route.js');
 app.use('/', basicAuth);
 
 app.listen(process.env.PORT, () => {
-    console.log(`listening in at http://localhost:${process.env.PORT}`);
+    console.log(`listening in at ${process.env.DATABASE_URL}${process.env.PORT}`);
 });
