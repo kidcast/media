@@ -33,6 +33,7 @@ describe('Media requests', () => {
       .field('title', newMedia.title)
       .attach('media', mediaLocation)
       .end((err, res) => {
+        console.log('Error', err);
         console.log('res.body', res.body);
         let amazonUrl = process.env.AWS_BUCKET + '.s3.amazonaws.com';
         let isAmazonUrl = res.body.mediaUrl.includes(amazonUrl);
