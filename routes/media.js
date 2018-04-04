@@ -40,6 +40,7 @@ router.get('/', (req, res) => {
 });
 
 router.post('/', upload.single('media'), function (req, res) {
+  console.log('in route. req.body', req.body);
   let ext = path.extname(req.file.originalname);
   let params = {
     ACL: 'public-read',
