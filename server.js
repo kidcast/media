@@ -8,7 +8,9 @@ const app = express();
 
 app.use(express.static('public'));
 
-// app.use(express.urlencoded());
+const bodyParser = require('body-parser');
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: false}));
 
 const mongoose = require('mongoose');
 
