@@ -29,7 +29,7 @@ const router = express.Router();
 
 router.get('/', (req, res) => {
   if (req.query.id) {
-    Media.findOne({_id: req.query.id}, (err, media) => {
+    Media.findOne({ _id: req.query.id }, (err, media) => {
       res.send(media);
     });
   } else {
@@ -61,6 +61,19 @@ router.post('/', upload.single('media'), function (req, res) {
       .then(media => {
         res.send(media);
       });
+  });
+});
+
+router.put('/', function (req, res) {
+  Media.findOneAndUpdate({_id: req.query.id}, {
+    title: req.body.title,
+    description: req.body.description,
+    category: req.body.category,
+    type: req.body.type
+  }, (err, media) => {
+    Media.findOne({_id: req.query.id}).then(media => {
+      res.send(media);
+    });
   });
 });
 
