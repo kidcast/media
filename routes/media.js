@@ -14,18 +14,20 @@ const upload = multer({ dest: 'uploads/' });
 
 const path = require('path');
 
-const Media = require('../model/media.js');
-const mediaStorage = require('../lib/media.js');
+const Media = require('../models/media.js');
+
 
 const mongoose = require('mongoose');
 
-const Model = require('../model/media.js');
+const Model = require('../models/media.js');
 
 const DATABASE_URL = process.env.MONGODB_URI || 'mongodb://localhost:27017/kidcast';
 
 mongoose.connect(DATABASE_URL);
 
 const router = express.Router();
+
+
 
 router.post('/', upload.single('media'), function (req, res) {
   let ext = path.extname(req.file.originalname);
