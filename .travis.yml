@@ -1,8 +1,12 @@
 language: node_js
 node_js:
 - 'stable'
+before_script: npm i
 services:
 - mongodb
-before_script: npm i
+env:
+  PORT: 3001
+  MONGODB_URI: mongodb://heroku_g39bjzk5:ndo1pind5tmp3jm7q79rgkdld4@ds231758.mlab.com:31758/heroku_g39bjzk5
 script:
+- node server.js &
 - npm test
