@@ -6,15 +6,17 @@ const express = require('express');
 
 const app = express();
 
+const bodyParser = require('body-parser');
+
 app.use(express.static('public'));
 
 const bodyParser = require('body-parser');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
-const mongoose = require('mongoose');
+const mediaAPI = require('./routes/media.js');
 
-mongoose.connect(process.env.MONGODB_URI);
+app.use('/api/media', mediaAPI);
 
 const basicAuth = require('./routers/basic-auth-route.js');
 app.use('/', basicAuth);
