@@ -28,10 +28,16 @@ mongoose.connect(DATABASE_URL);
 const router = express.Router();
 
 router.get('/', (req, res) => {
-  Media.find().then(media => {
-    res.send(media);
-  })
-})
+  if (req.query.id) {
+    Media.findOne({_id: req.query.id}, (err, media) => {
+      res.send(media);
+    });
+  } else {
+    Media.find().then(media => {
+      res.send(media);
+    });
+  }
+});
 
 router.post('/', upload.single('media'), function (req, res) {
   let ext = path.extname(req.file.originalname);
