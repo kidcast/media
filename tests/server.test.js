@@ -19,7 +19,7 @@ describe('Media requests', () => {
 
   it('should return 200 for uploading a photo and include proper AWS url', done => {
     let mediaLocation = './uploads/kidMusic.png';
-    let uploadUrl = `${process.env.DATABASE_URL}${process.env.PORT}/api/media/`;
+    let uploadUrl = `${process.env.DATABASE_URL}/api/media/`;
     console.log('upload url', uploadUrl);
     let newMedia = {
       title: `Test Title: ${Math.random()}`,
