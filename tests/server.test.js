@@ -2,6 +2,8 @@
 
 require('dotenv').config();
 
+const superagent = require('superagent');
+
 describe('Media requests', () => {
   function seed() {
     let mediaLocation = './uploads/kidCast.png';
@@ -15,14 +17,23 @@ describe('Media requests', () => {
       });
   }
 
-  it('should return 200 for uploading a photo', done => {
-    let imageLocation = './uploads/kidCast.png';
-    let uploadUrl = 'http://localhost:3000/api/posts/upload';
+  it('should return 200 for uploading a photo and include proper AWS url', done => {
+    let mediaLocation = './uploads/kidMusic.png';
+    let uploadUrl = 'http://localhost:3000/api/media/';
+    let newMedia = {
+      title: `Test Title: ${Math.random()}`,
+      description: `Test Description: ${Math.random()}`,
+      // userId: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
+      category: `Test Category: ${Math.random()}`,
+      type: `Test Type: ${Math.random()}`,
+      public: false
+    };
     superagent.post(uploadUrl)
-      .attach('picture', imageLocation)
+      .field('title', newMedia.title)
+      .attach('media', mediaLocation)
       .end((err, res) => {
-        let amazonUrl = process.env.AWS_BUCKET + '.s3-us-west-2.amazonaws.com';
-        let isAmazonUrl = res.body.imageUrl.includes(amazonUrl);
+        let amazonUrl = process.env.AWS_BUCKET + '.s3.amazonaws.com';
+        let isAmazonUrl = res.body.mediaUrl.includes(amazonUrl);
         expect(isAmazonUrl).toBe(true);
         expect(res.status).toBe(200);
         done();
