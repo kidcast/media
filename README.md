@@ -13,7 +13,7 @@
 
 + As a user, I want my child to be able to view child friendly content without fear of inappropriate ads or content. 
 
--------
+------
 
 + As a developer, I want to create funtions that create a smooth UI experience.
 
