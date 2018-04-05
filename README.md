@@ -1,3 +1,33 @@
+**User Stories**
++ As a user I want to type in a new username.
+
++ As a user I want to enter a password.
+
++ As a user I want to re-enter my password to verify it.
+
++ As a user I want to submit this information and create an account.
+
++ As a user I want to upload personal videos only to be seen by people within my circle - Not public.
+
++ As a user I want to be able to upload videos for public viewing, after approval. 
+
++ As a user, I want my child to be able to view child friendly content without fear of inappropriate ads or content. 
+
+-------
+
++ As a developer, I want to create funtions that create a smooth UI experience.
+
++ As a developer, I want to create apps where the user can upload videos and choose to be private (limited to their own account) or public viewing.
+
++ As a developer, I want to create a Public Viewing application where uploaded videos will be filtered before being posted. 
+
+
+
+
+
+
+
+
 # media
 
 ## Project Topic
