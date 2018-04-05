@@ -15,20 +15,29 @@ router.post('/signup', express.json(), (req, res) => {
       console.log('created user', user);
       res.status(200).send(user);
     })
-    .catch(() => res.sendStatus(400));
+    .catch((err) => {
+      console.log('user not created', err);
+      res.sendStatus(400);
+    });
 });
 
-router.get('/singin', (req, res) => {
+router.get('/signin', (req, res) => {
   let [username, password] = getAuth(req, res);
   User.findOne({
     username
   }).then(user => {
+    console.log('get request user password check', user);
     user.checkPassword(password).then(result => {
       if (result) {
-        let data = {
-          userId: user_id
-        };
-        let token = jws.sign(data, process.env.SECRET);
+        console.log('user password check', result);
+        let data = {userId: user._id};
+        let token = jwt.sign(data, process.env.SECRET, (err, newToken) => {
+          res.status(200);
+          res.send({
+            signedIn: true,
+            token: newToken,
+          });
+        });
       } else {
         res.status(401).send('please re-enter password');
       }
