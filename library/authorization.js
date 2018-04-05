@@ -9,6 +9,7 @@ function getAuth(req, res) {
   }
     
   let payload = authHeader.split('Basic ')[1];
+  console.log('authheader', authHeader);
   let decoded = Buffer.from(payload, 'base64').toString();
   return decoded.split(':');
 }
