@@ -49,7 +49,7 @@ router.post('/', bearerMiddlewear, upload.single('media'), function (req, res) {
       title: req.body.title,
       description: req.body.description,
       mediaUrl: s3Data.Location,
-      // userId: req.body.userId,
+      userId: req.body.userId,
       category: req.body.category,
       type: req.body.type,
       public: false
