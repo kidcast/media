@@ -11,9 +11,9 @@ const TestUser = require('../models/user.js');
 describe('User model test',() => {
   it('Test that a user has a username property', done => {
     let tempUser = new TestUser(getUserParams());
-    expect(tempUser.username).toBe('bill');
-    expect(tempUser.email).toBe('bill@microsoft.com');
-    expect(tempUser.password).toBe('windows95');
+    expect(typeof tempUser.username).toEqual('string');
+    expect(typeof tempUser.email).toEqual('string');
+    expect(typeof tempUser.password).toEqual('string');
     done();
   });
 });
@@ -131,8 +131,8 @@ describe('Media Sunny Day Requests', () => {
 //
 function getUserParams() {
   return {
-    username: 'bill',
-    email: 'bill@microsoft.com',
+    username: `bill${Math.random()}`,
+    email: `bill${Math.random()}@microsoft.com`,
     password: 'windows95'
   };
 };
@@ -181,8 +181,9 @@ describe('/api/signup', () => {
     let params = getUserParams();
 
     superagent.post(SIGNUP_URL)
+      .auth(params.username, params.password)
       .set('Content-Type', 'application/json')
-      .send(params)
+      .send(JSON.stringify(params))
       .then(res => {
         expect(res.status).toEqual(200);
         done();
