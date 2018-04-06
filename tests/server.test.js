@@ -1,8 +1,22 @@
 'use strict';
-
 require('dotenv').config();
 
 const superagent = require('superagent');
+const PORT = process.env.PORT || 3000;
+const SERVER_URL = 'http://localhost:' + PORT;
+const SIGNUP_URL = SERVER_URL + '/api/signup';
+const SIGNIN_URL = SERVER_URL + '/api/signin';
+
+const TestUser = require('../models/user.js');
+describe('User model test',() => {
+  it('Test that a user has a username property', done => {
+    let tempUser = new TestUser(getUserParams());
+    expect(tempUser.username).toBe('bill');
+    expect(tempUser.email).toBe('bill@microsoft.com');
+    expect(tempUser.password).toBe('windows95');
+    done();
+  });
+});
 
 describe('Media Sunny Day Requests', () => {
 
@@ -112,3 +126,112 @@ describe('Media Sunny Day Requests', () => {
   });
 
 });
+
+//make sure that test are testing data lines and functions vs response's
+//
+function getUserParams() {
+  return {
+    username: 'bill',
+    email: 'bill@microsoft.com',
+    password: 'windows95'
+  };
+};
+
+describe('/api/signup', () => {
+  it('should return status 400 if missing username', (done) => {
+    let params = getUserParams();
+    delete params['username'];
+
+    superagent.post(SIGNUP_URL)
+      .set('Content-Type', 'application/json')
+      .send(params)
+      .catch(err => {
+        expect(err.status).toEqual(400);
+        done();
+      });
+  });
+
+  it('should return status 400 if missing email', (done) => {
+    let params = getUserParams();
+    delete params['email'];
+
+    superagent.post(SIGNUP_URL)
+      .set('Content-Type', 'application/json')
+      .send(params)
+      .catch(err => {
+        expect(err.status).toEqual(400);
+        done();
+      });
+  });
+
+  it('should return status 400 if missing password', (done) => {
+    let params = getUserParams();
+    delete params['password'];
+
+    superagent.post(SIGNUP_URL)
+      .set('Content-Type', 'application/json')
+      .send(params)
+      .catch(err => {
+        expect(err.status).toEqual(400);
+        done();
+      });
+  });
+
+  it('should return status 200 with successful request', (done) => {
+    let params = getUserParams();
+
+    superagent.post(SIGNUP_URL)
+      .set('Content-Type', 'application/json')
+      .send(params)
+      .then(res => {
+        expect(res.status).toEqual(200);
+        done();
+      });
+  });
+});
+
+describe('/api/signin', () => {
+  it('should return 401 unauthorized if password is incorrect', (done) => {
+    let params = getUserParams();
+
+    superagent.post(SIGNUP_URL)
+      .set('Content-Type', 'application/json')
+      .send(params)
+      .then(res => {
+        expect(res.status).toEqual(200);
+
+        // intentionally set the password as a wrong password
+        let payload = params['username'] + ':' + 'wrongpassword';
+        let encoded = btoa(payload);
+
+        return superagent.get(SIGNIN_URL)
+          .set('Authorization', 'Basic ' + encoded);
+      })
+      .catch(err => {
+        expect(err.status).toEqual(401);
+        done();
+      });
+  });
+
+  it('should return 200 if username and password are', (done) => {
+    let params = getUserParams();
+
+    superagent.post(SIGNUP_URL)
+      .set('Content-Type', 'application/json')
+      .send(params)
+      .then(res => {
+        expect(res.status).toEqual(200);
+
+        let payload = params['username'] + ':' + params['password'];
+        let encoded = btoa(payload);
+
+        return superagent.get(SIGNIN_URL)
+          .set('Authorization', 'Basic ' + encoded);
+      })
+      .then(res => {
+        expect(res.status).toEqual(200);
+        done();
+      });
+  });
+});
+
