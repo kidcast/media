@@ -195,8 +195,8 @@ describe('All Auth Tests', () => {
             });
         });
     });
-
   });
+
 
   //make sure that test are testing data lines and functions vs response's
   //
@@ -306,5 +306,3 @@ describe('All Auth Tests', () => {
         });
     });
   });
-
-});
