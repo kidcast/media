@@ -25,23 +25,18 @@ describe('All Auth Tests', () => {
         password: `randomPasswordTest${Math.random()}`,
         email: `${Math.random()}@email.com`
       };
-      console.log('signing up');
       superagent.post(signUpUrl)
         .send(signUpBody)
         .end((err, res) => {
-          console.log('signed up');
           if (err) {
-            console.log('sign up error:', err);
+            console.error('sign up error:', err);
           }
-
           let userId = res.body._id;
           //Sign In
           let signInUrl = `http://localhost:${process.env.PORT}/api/signin`;
-          console.log('signing in');
           superagent.get(signInUrl)
             .auth(signUpBody.username, signUpBody.password)
             .end((err, res) => {
-              console.log('signed in');
               let token = res.body.token;
               let mediaLocation = './uploads/kidMusic.png';
               let newMedia = {
@@ -54,7 +49,6 @@ describe('All Auth Tests', () => {
               };
               // post new media
               let requestUrl = `http://localhost:${process.env.PORT}/api/media`;
-              console.log('posting');
               superagent.post(requestUrl)
                 .field('title', newMedia.title)
                 .field('description', newMedia.description)
@@ -64,14 +58,10 @@ describe('All Auth Tests', () => {
                 .set('Authorization', 'Bearer ' + token)
                 .attach('media', mediaLocation)
                 .end((err, res) => {
-                  console.log('posted');
                   let getUrl = `http://localhost:${process.env.PORT}/api/media`;
                   superagent.get(getUrl)
                     .set('Authorization', 'Bearer ' + token)
                     .end((err, res) => {
-                      console.log('finished bearer auth');
-                      console.log('err', err);
-                      console.log('res', res.body);
                       let isAnArray = Array.isArray(res.body);
                       expect(isAnArray).toBe(true);
                       done();
@@ -89,23 +79,18 @@ describe('All Auth Tests', () => {
         password: `randomPasswordTest${Math.random()}`,
         email: `${Math.random()}@email.com`
       };
-      console.log('signing up');
       superagent.post(signUpUrl)
         .send(signUpBody)
         .end((err, res) => {
-          console.log('signed up');
           if (err) {
-            console.log('sign up error:', err);
+            console.error('sign up error:', err);
           }
-
           let userId = res.body._id;
           //Sign In
           let signInUrl = `http://localhost:${process.env.PORT}/api/signin`;
-          console.log('signing in');
           superagent.get(signInUrl)
             .auth(signUpBody.username, signUpBody.password)
             .end((err, res) => {
-              console.log('signed in');
               let token = res.body.token;
               let mediaLocation = './uploads/kidMusic.png';
               let newMedia = {
@@ -118,7 +103,6 @@ describe('All Auth Tests', () => {
               };
               // post new media
               let requestUrl = `http://localhost:${process.env.PORT}/api/media`;
-              console.log('posting');
               superagent.post(requestUrl)
                 .field('title', newMedia.title)
                 .field('description', newMedia.description)
@@ -128,15 +112,11 @@ describe('All Auth Tests', () => {
                 .set('Authorization', 'Bearer ' + token)
                 .attach('media', mediaLocation)
                 .end((err, res) => {
-                  console.log('posted');
                   let amazonUrl = res.body.mediaUrl;
                   let getUrl = `http://localhost:${process.env.PORT}/api/media?id=${res.body._id}`;
                   superagent.get(getUrl)
                     .set('Authorization', 'Bearer ' + token)
                     .end((err, res) => {
-                      console.log('finished bearer auth');
-                      console.log('err', err);
-                      console.log('res', res.body);
                       let fetchedAmazonUrl = res.body.mediaUrl;
                       expect(fetchedAmazonUrl).toBe(amazonUrl);
                       expect(res.status).toBe(200);
@@ -196,7 +176,126 @@ describe('All Auth Tests', () => {
             });
         });
     });
-  });
+
+    it('should return 200 for updating a media resource\'s information', done => {
+      //sign Up
+      let signUpUrl = `http://localhost:${process.env.PORT}/api/signup`;
+      let signUpBody = {
+        username: `randomUserTest${Math.random()}`,
+        password: `randomPasswordTest${Math.random()}`,
+        email: `${Math.random()}@email.com`
+      };
+      superagent.post(signUpUrl)
+        .auth(signUpBody.username, signUpBody.password)
+        .set('Content-Type', 'application/json')
+        .send(JSON.stringify(signUpBody))
+        .end((err, res) => {
+          let userId = res.body._id;
+          //Sign In
+          let signInUrl = `http://localhost:${process.env.PORT}/api/signin`;
+          superagent.get(signInUrl)
+            .auth(signUpBody.username, signUpBody.password)
+            .end((err, res) => {
+              let token = res.body.token;
+              let mediaLocation = './uploads/kidMusic.png';
+              let newMedia = {
+                title: `Test Title: ${Math.random()}`,
+                description: `Test Description: ${Math.random()}`,
+                category: `Test Category: ${Math.random()}`,
+                type: `Test Type: ${Math.random()}`,
+                userId: userId,
+                public: false
+              };
+              // post new media
+              let uploadUrl = `http://localhost:${process.env.PORT}/api/media`;
+              superagent.post(uploadUrl)
+                .field('title', newMedia.title)
+                .field('description', newMedia.description)
+                .field('category', newMedia.category)
+                .field('type', newMedia.type)
+                .field('userId', userId)
+                .set('Authorization', 'Bearer ' + token)
+                .attach('media', mediaLocation)
+                .end((err, res) => {
+                  let mediaId = res.body._id;
+                  let updateUrl = `http://localhost:${process.env.PORT}/api/media?id=${mediaId}`;
+                  let newMediaSettings = {
+                    title: `new title ${Math.random()}`,
+                    description: `new description ${Math.random()}`,
+                    category: `new category ${Math.random()}`,
+                    type: `new type ${Math.random()}`,
+                  };
+                  // updated the media
+                  superagent.put(updateUrl)
+                    .set('Authorization', 'Bearer ' + token)
+                    .send(newMediaSettings)
+                    .end((err, res) => {
+                      let updatedTitle = res.body.title;
+                      expect(updatedTitle).toBe(newMediaSettings.title);
+                      expect(res.status).toBe(200);
+                      done();
+                    });
+                });
+            });
+        });
+    });
+
+    it('should return 204 for deleting a resource', done => {
+      //sign Up
+      let signUpUrl = `http://localhost:${process.env.PORT}/api/signup`;
+      let signUpBody = {
+        username: `randomUserTest${Math.random()}`,
+        password: `randomPasswordTest${Math.random()}`,
+        email: `${Math.random()}@email.com`
+      };
+      superagent.post(signUpUrl)
+        .auth(signUpBody.username, signUpBody.password)
+        .set('Content-Type', 'application/json')
+        .send(JSON.stringify(signUpBody))
+        .end((err, res) => {
+          let userId = res.body._id;
+          //Sign In
+          let signInUrl = `http://localhost:${process.env.PORT}/api/signin`;
+          superagent.get(signInUrl)
+            .auth(signUpBody.username, signUpBody.password)
+            .end((err, res) => {
+              let token = res.body.token;
+              let mediaLocation = './uploads/kidMusic.png';
+              let newMedia = {
+                title: `Test Title: ${Math.random()}`,
+                description: `Test Description: ${Math.random()}`,
+                category: `Test Category: ${Math.random()}`,
+                type: `Test Type: ${Math.random()}`,
+                userId: userId,
+                public: false
+              };
+              // post new media
+              let uploadUrl = `http://localhost:${process.env.PORT}/api/media`;
+              superagent.post(uploadUrl)
+                .field('title', newMedia.title)
+                .field('description', newMedia.description)
+                .field('category', newMedia.category)
+                .field('type', newMedia.type)
+                .field('userId', userId)
+                .set('Authorization', 'Bearer ' + token)
+                .attach('media', mediaLocation)
+                .end((err, res) => {
+                  let mediaId = res.body._id;
+                  let deleteUrl = `http://localhost:${process.env.PORT}/api/media?id=${mediaId}`;
+                  // updated the media
+                  superagent.delete(deleteUrl)
+                    .set('Authorization', 'Bearer ' + token)
+                    .end((err, res) => {
+                      expect(res.status).toBe(204);
+                      done();
+                    });
+                });
+            });
+        });
+    });
+
+
+  }); // Media tests end.
 
   //make sure that test are testing data lines and functions vs response's
   //
