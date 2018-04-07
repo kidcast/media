@@ -14,6 +14,9 @@
 A back-end server that displays kid centered, safe, searchable, parent-approved content for kids.
 
 ## Getting started
+User will need to download [Postman](https://www.getpostman.com/) and install the application onto their computer. 
+
+Next, the user will open Postman. After it is open, user will copy and paste the following code: ```<this is the code>``` into (the desired postman locations, choose GET, PUT, etc).
 * Describe user log-in
 * Explain authorization
 
