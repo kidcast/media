@@ -197,7 +197,6 @@ describe('All Auth Tests', () => {
     });
   });
 
-
   //make sure that test are testing data lines and functions vs response's
   //
   function getUserParams() {
@@ -306,3 +305,4 @@ describe('All Auth Tests', () => {
         });
     });
   });
+});

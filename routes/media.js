@@ -22,7 +22,7 @@ const DATABASE_URL = process.env.MONGODB_URI || 'mongodb://localhost:27017/kidca
 mongoose.connect(DATABASE_URL);
 const router = express.Router();
 
-router.get('/', bearerMiddlewear, (req, res) => {
+router.get('/', (req, res) => {
   if (req.query.id) {
     Media.findOne({ _id: req.query.id }, (err, media) => {
       res.send(media);
