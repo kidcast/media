@@ -1,5 +1,7 @@
 'use strict';
 
+require('../server.js');
+
 require('dotenv').config();
 
 const superagent = require('superagent');
@@ -9,7 +11,6 @@ const SIGNUP_URL = SERVER_URL + '/api/signup';
 const SIGNIN_URL = SERVER_URL + '/api/signin';
 
 describe('Media Sunny Day Requests', () => {
-
   it('should return 200 for a get request for one media resource', done => {
     //sign Up
     let signUpUrl = `http://localhost:${process.env.PORT}/api/signup`;
@@ -18,17 +19,23 @@ describe('Media Sunny Day Requests', () => {
       password: `randomPasswordTest${Math.random()}`,
       email: `${Math.random()}@email.com`
     };
+    console.log('signing up');
     superagent.post(signUpUrl)
-      .auth(signUpBody.username, signUpBody.password)
-      .set('Content-Type', 'application/json')
-      .send(JSON.stringify(signUpBody))
+      .send(signUpBody)
       .end((err, res) => {
+        console.log('signed up');
+        if (err) {
+          console.log('sign up error:', err);
+        }
+
         let userId = res.body._id;
         //Sign In
         let signInUrl = `http://localhost:${process.env.PORT}/api/signin`;
+        console.log('signing in');
         superagent.get(signInUrl)
           .auth(signUpBody.username, signUpBody.password)
           .end((err, res) => {
+            console.log('signed in');
             let token = res.body.token;
             let mediaLocation = './uploads/kidMusic.png';
             let newMedia = {
@@ -41,6 +48,7 @@ describe('Media Sunny Day Requests', () => {
             };
             // post new media
             let requestUrl = `http://localhost:${process.env.PORT}/api/media`;
+            console.log('posting');
             superagent.post(requestUrl)
               .field('title', newMedia.title)
               .field('description', newMedia.description)
@@ -50,11 +58,15 @@ describe('Media Sunny Day Requests', () => {
               .set('Authorization', 'Bearer ' + token)
               .attach('media', mediaLocation)
               .end((err, res) => {
+                console.log('posted');
                 let amazonUrl = res.body.mediaUrl;
                 let getUrl = `http://localhost:${process.env.PORT}/api/media?id=${res.body._id}`;
                 superagent.get(getUrl)
                   .set('Authorization', 'Bearer ' + token)
                   .end((err, res) => {
+                    console.log('finished bearer auth');
+                    console.log('err', err);
+                    console.log('res', res.body);
                     let fetchedAmazonUrl = res.body.mediaUrl;
                     expect(fetchedAmazonUrl).toBe(amazonUrl);
                     expect(res.status).toBe(200);

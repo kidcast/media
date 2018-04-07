@@ -15,7 +15,6 @@ const mongoose = require('mongoose');
 
 
 const Media = require('../models/media.js');
-const Model = require('../models/media.js');
 
 const bearerMiddlewear = require('../library/bearer-middleware');
 
@@ -36,7 +35,6 @@ router.get('/', bearerMiddlewear, (req, res) => {
 });
 
 router.post('/', bearerMiddlewear, upload.single('media'), function (req, res) {
-  console.log('in route. req.body', req.body);
   let ext = path.extname(req.file.originalname);
   let params = {
     ACL: 'public-read',
