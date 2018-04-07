@@ -8,6 +8,32 @@ const SERVER_URL = 'http://localhost:' + PORT;
 const SIGNUP_URL = SERVER_URL + '/api/signup';
 const SIGNIN_URL = SERVER_URL + '/api/signin';
 
+<<<<<<< HEAD
+describe('Media requests', () => {
+  function seed() {
+    let mediaLocation = './uploads/kidCast.png';
+    let uploadUrl = `http://localhost:${process.env.PORT}/api/media/`;
+    superagent.post(uploadUrl)
+      .attach('media', mediaLocation)
+      .end((err, res) => {
+        let amazonUrl = process.env.AWS_BUCKET + '.s3-us-west-2.amazonaws.com';
+        let isAmazonUrl = res.body.imageUrl.includes(amazonUrl);
+        res.send(isAmazonUrl);
+      });
+  }
+
+  it('should return 200 for uploading a photo and include proper AWS url', done => {
+    let mediaLocation = './uploads/kidMusic.png';
+    let uploadUrl = `http://localhost:${process.env.PORT}/api/media/`;
+    console.log('upload url', uploadUrl);
+    let newMedia = {
+      title: `Test Title: ${Math.random()}`,
+      description: `Test Description: ${Math.random()}`,
+      // userId: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
+      category: `Test Category: ${Math.random()}`,
+      type: `Test Type: ${Math.random()}`,
+      public: false
+=======
 describe('Media Sunny Day Requests', () => {
 
   it('should return 200 for a get request for one media resource', done => {
@@ -72,6 +98,7 @@ describe('Media Sunny Day Requests', () => {
       username: `randomUserTest${Math.random()}`,
       password: `randomPasswordTest${Math.random()}`,
       email: `${Math.random()}@email.com`
+>>>>>>> 1fd793142930190f8630141c891f39120e20495d
     };
     superagent.post(signUpUrl)
       .auth(signUpBody.username, signUpBody.password)
@@ -226,3 +253,11 @@ describe('/api/signin', () => {
   });
 });
 
+<<<<<<< HEAD
+  it('it should return 200 for doing a GET request.', done => {
+    seed();
+  })
+
+});
+=======
+>>>>>>> 1fd793142930190f8630141c891f39120e20495d
