@@ -3,31 +3,27 @@
 require('dotenv').config();
 
 const fs = require('fs');
-
 const AWS = require('aws-sdk');
 const s3 = new AWS.S3();
 
 const express = require('express');
+const path = require('path');
 
 const multer = require('multer');
 const upload = multer({ dest: 'uploads/' });
-
-const path = require('path');
-
-const Media = require('../models/media.js');
-
-
 const mongoose = require('mongoose');
 
+
+const Media = require('../models/media.js');
 const Model = require('../models/media.js');
 
+const bearerMiddlewear = require('../library/bearer-middleware');
+
 const DATABASE_URL = process.env.MONGODB_URI || 'mongodb://localhost:27017/kidcast';
-
 mongoose.connect(DATABASE_URL);
-
 const router = express.Router();
 
-router.get('/', (req, res) => {
+router.get('/', bearerMiddlewear, (req, res) => {
   if (req.query.id) {
     Media.findOne({ _id: req.query.id }, (err, media) => {
       res.send(media);
@@ -39,7 +35,7 @@ router.get('/', (req, res) => {
   }
 });
 
-router.post('/', upload.single('media'), function (req, res) {
+router.post('/', bearerMiddlewear, upload.single('media'), function (req, res) {
   console.log('in route. req.body', req.body);
   let ext = path.extname(req.file.originalname);
   let params = {
@@ -53,7 +49,7 @@ router.post('/', upload.single('media'), function (req, res) {
       title: req.body.title,
       description: req.body.description,
       mediaUrl: s3Data.Location,
-      // userId: req.body.userId,
+      userId: req.body.userId,
       category: req.body.category,
       type: req.body.type,
       public: false
@@ -65,7 +61,7 @@ router.post('/', upload.single('media'), function (req, res) {
   });
 });
 
-router.put('/', function (req, res) {
+router.put('/', bearerMiddlewear, function (req, res) {
   Media.findOneAndUpdate({_id: req.query.id}, {
     title: req.body.title,
     description: req.body.description,
@@ -78,7 +74,7 @@ router.put('/', function (req, res) {
   });
 });
 
-router.delete('/', function (req, res) {
+router.delete('/', bearerMiddlewear, function (req, res) {
   Media.remove({_id: req.query.id}, (err, media) => {
     res.status(204);
     res.send('Deleted Successfully');
