@@ -1,4 +1,5 @@
 'use strict';
+
 require('dotenv').config();
 
 const superagent = require('superagent');
@@ -7,8 +8,6 @@ const PORT = process.env.PORT || 3000;
 const SERVER_URL = 'http://localhost:' + PORT;
 const SIGNUP_URL = SERVER_URL + '/api/signup';
 const SIGNIN_URL = SERVER_URL + '/api/signin';
-
-const TestUser = require('../models/user.js');
 
 describe('Media Sunny Day Requests', () => {
 
@@ -122,8 +121,8 @@ describe('Media Sunny Day Requests', () => {
 //
 function getUserParams() {
   return {
-    username: 'bill',
-    email: 'bill@microsoft.com',
+    username: `bill${Math.random()}`,
+    email: `bill${Math.random()}@microsoft.com`,
     password: 'windows95'
   };
 };
@@ -140,7 +139,33 @@ describe('/api/signup', () => {
         expect(tempUser.email).toEqual('bill@microsoft.com');
         done();
       });
-  })
+  });
+
+  it('should return status 400 if missing password', (done) => {
+    let params = getUserParams();
+    delete params['password'];
+
+    superagent.post(SIGNUP_URL)
+      .set('Content-Type', 'application/json')
+      .send(params)
+      .catch(err => {
+        expect(err.status).toEqual(400);
+        done();
+      });
+  });
+
+  it('should return status 200 with successful request', (done) => {
+    let params = getUserParams();
+
+    superagent.post(SIGNUP_URL)
+      .auth(params.username, params.password)
+      .set('Content-Type', 'application/json')
+      .send(JSON.stringify(params))
+      .then(res => {
+        expect(res.status).toEqual(200);
+        done();
+      });
+  });
 });
 
 describe('/api/signin', () => {
