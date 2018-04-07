@@ -1,4 +1,5 @@
 'use strict';
+
 require('dotenv').config();
 
 const superagent = require('superagent');
@@ -6,17 +7,6 @@ const PORT = process.env.PORT || 3000;
 const SERVER_URL = 'http://localhost:' + PORT;
 const SIGNUP_URL = SERVER_URL + '/api/signup';
 const SIGNIN_URL = SERVER_URL + '/api/signin';
-
-const TestUser = require('../models/user.js');
-describe('User model test',() => {
-  it('Test that a user has a username property', done => {
-    let tempUser = new TestUser(getUserParams());
-    expect(typeof tempUser.username).toEqual('string');
-    expect(typeof tempUser.email).toEqual('string');
-    expect(typeof tempUser.password).toEqual('string');
-    done();
-  });
-});
 
 describe('Media Sunny Day Requests', () => {
 
