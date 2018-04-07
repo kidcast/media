@@ -12,7 +12,7 @@
 ## Overview
 A back-end server that displays kid centered, safe, searchable, parent-approved content for kids.
 
-## Getting started - User
+## Get started - User
 
 * Click this [link to KidCast](https://kidcast.herokuapp.com)
 
@@ -24,9 +24,63 @@ A back-end server that displays kid centered, safe, searchable, parent-approved 
 
 * Search through other user content
 
-## Getting started - Developer
+## API End Points
 
-* 
+### Post
+#### Create new user
+
+/api/signup
+```
+    {
+	"username": "<unique username>",
+    "email": "<email address>",
+    "password": "<password>"
+}
+```
+RETURN
+```
+{
+    "_id": "<hashed user id>",
+    "username": "<username>",
+    "email": "<email address>",
+    "password": "<hashed password>",
+    "__v": 0
+}
+```
+Proceede to Sign In
+
+### GET All
+#### Retreve media
+
+/api/media
+RETURN All available media resources
+```
+    {
+        "public": <true or false>,
+        "_id": "<hashed user id>",
+        "title": "<media title>",
+        "description": "<media description>",
+        "mediaUrl": "<media url>",
+        "userId": "<hashed user id>",
+        "category": "<media category>",
+        "type": "<media file type>",
+        "__v": 0
+    },
+```
+
+### GET One
+#### Retreve media
+
+/api/media?id=
+RETURN one media resource to _id search
+
+### PUT
+#### Upload new media
+
+
+### DELETE
+#### Remove media
+
 
 
 
