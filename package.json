@@ -21,7 +21,7 @@
   "devDependencies": {},
   "scripts": {
     "test": "jest",
-    "start": "node server.js"
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",
