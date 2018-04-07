@@ -15,7 +15,6 @@ const mongoose = require('mongoose');
 
 
 const Media = require('../models/media.js');
-const Model = require('../models/media.js');
 
 const bearerMiddlewear = require('../library/bearer-middleware');
 
@@ -23,7 +22,7 @@ const DATABASE_URL = process.env.MONGODB_URI || 'mongodb://localhost:27017/kidca
 mongoose.connect(DATABASE_URL);
 const router = express.Router();
 
-router.get('/', bearerMiddlewear, (req, res) => {
+router.get('/', (req, res) => {
   if (req.query.id) {
     Media.findOne({ _id: req.query.id }, (err, media) => {
       res.send(media);
@@ -36,7 +35,6 @@ router.get('/', bearerMiddlewear, (req, res) => {
 });
 
 router.post('/', bearerMiddlewear, upload.single('media'), function (req, res) {
-  console.log('in route. req.body', req.body);
   let ext = path.extname(req.file.originalname);
   let params = {
     ACL: 'public-read',

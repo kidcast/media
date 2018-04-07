@@ -17,6 +17,26 @@ const basicAuth = require('./routes/basic-auth-route.js');
 app.use('/api/media', mediaAPI);
 app.use('/api', basicAuth);
 
-app.listen(process.env.PORT, () => {
-  console.log(`listening in at Port ${process.env.PORT}`);
-});
+// Server Controls
+const server = module.exports = {};
+server.start = () => {
+  return new Promise((resolve, reject) => {
+    if(server.isOn) return reject(new Error('Server Error. Server already running.'));
+    server.http = app.listen(process.env.PORT, () => {
+      console.log(`Listening on ${process.env.PORT}`);
+      server.isOn = true;
+      // mongoose.connect(process.env.MONGODB_URI);
+      return resolve(server);
+    });
+  });
+};
+server.stop = () => {
+  return new Promise((resolve, reject) => {
+    if(!server.isOn) return reject(new Error('Server Error. Server already stopped.'));
+    server.http.close(() => {
+      server.isOn = false;
+      // mongoose.disconnect();
+      return resolve();
+    });
+  });
+};
