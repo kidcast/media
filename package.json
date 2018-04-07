@@ -32,5 +32,10 @@
   "bugs": {
     "url": "https://github.com/kidcast/media/issues"
   },
-  "homepage": "https://github.com/kidcast/media#readme"
+  "homepage": "https://github.com/kidcast/media#readme",
+  "jest": {
+    "collectCoverage": true,
+    "coveragePathIgnorePatterns": ["coverage/"],
+    "collectCoverageFrom": ["**/**.js"]
+  }
 }
