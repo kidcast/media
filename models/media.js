@@ -8,8 +8,8 @@ let mediaSchema = new mongoose.Schema({
   description: String,
   mediaUrl: String, 
   userId: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
-  category: String,
-  type: String,
+  category: {type: String, enum: ['fun', 'education']},
+  type: {type: String, default: 'video'},
   public: {type: Boolean, default: false}
 });
 const Media = mongoose.model('Media', mediaSchema);

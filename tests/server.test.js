@@ -1,5 +1,7 @@
 'use strict';
 
+jest.setTimeout(30000);
+
 const server = require('../server.js');
 
 require('dotenv').config();
@@ -42,10 +44,8 @@ describe('All Auth Tests', () => {
               let newMedia = {
                 title: `Test Title: ${Math.random()}`,
                 description: `Test Description: ${Math.random()}`,
-                category: `Test Category: ${Math.random()}`,
-                type: `Test Type: ${Math.random()}`,
+                category: `fun`,
                 userId: userId,
-                public: false
               };
               // post new media
               let requestUrl = `http://localhost:${process.env.PORT}/api/media`;
@@ -53,7 +53,6 @@ describe('All Auth Tests', () => {
                 .field('title', newMedia.title)
                 .field('description', newMedia.description)
                 .field('category', newMedia.category)
-                .field('type', newMedia.type)
                 .field('userId', userId)
                 .set('Authorization', 'Bearer ' + token)
                 .attach('media', mediaLocation)
@@ -95,10 +94,8 @@ describe('All Auth Tests', () => {
               let newMedia = {
                 title: `Test Title: ${Math.random()}`,
                 description: `Test Description: ${Math.random()}`,
-                category: `Test Category: ${Math.random()}`,
-                type: `Test Type: ${Math.random()}`,
+                category: `fun`,
                 userId: userId,
-                public: false
               };
               // post new media
               let requestUrl = `http://localhost:${process.env.PORT}/api/media`;
@@ -106,7 +103,6 @@ describe('All Auth Tests', () => {
                 .field('title', newMedia.title)
                 .field('description', newMedia.description)
                 .field('category', newMedia.category)
-                .field('type', newMedia.type)
                 .field('userId', userId)
                 .set('Authorization', 'Bearer ' + token)
                 .attach('media', mediaLocation)
@@ -115,7 +111,6 @@ describe('All Auth Tests', () => {
                   let getUrl = `http://localhost:${process.env.PORT}/api/media?id=${res.body._id}`;
                   superagent.get(getUrl)
                     .end((err, res) => {
-                      console.log('res.status', res.status);
                       expect(res.status).toBe(400);
                       done();
                     });
@@ -148,10 +143,8 @@ describe('All Auth Tests', () => {
               let newMedia = {
                 title: `Test Title: ${Math.random()}`,
                 description: `Test Description: ${Math.random()}`,
-                category: `Test Category: ${Math.random()}`,
-                type: `Test Type: ${Math.random()}`,
+                category: `fun`,
                 userId: userId,
-                public: false
               };
               // post new media
               let uploadUrl = `http://localhost:${process.env.PORT}/api/media`;
@@ -159,7 +152,6 @@ describe('All Auth Tests', () => {
                 .field('title', newMedia.title)
                 .field('description', newMedia.description)
                 .field('category', newMedia.category)
-                .field('type', newMedia.type)
                 .field('userId', userId)
                 .set('Authorization', 'Bearer ' + token)
                 .attach('media', mediaLocation)
@@ -198,10 +190,8 @@ describe('All Auth Tests', () => {
               let newMedia = {
                 title: `Test Title: ${Math.random()}`,
                 description: `Test Description: ${Math.random()}`,
-                category: `Test Category: ${Math.random()}`,
-                type: `Test Type: ${Math.random()}`,
+                category: `fun`,
                 userId: userId,
-                public: false
               };
               // post new media
               let uploadUrl = `http://localhost:${process.env.PORT}/api/media`;
@@ -209,7 +199,6 @@ describe('All Auth Tests', () => {
                 .field('title', newMedia.title)
                 .field('description', newMedia.description)
                 .field('category', newMedia.category)
-                .field('type', newMedia.type)
                 .field('userId', userId)
                 .set('Authorization', 'Bearer ' + token)
                 .attach('media', mediaLocation)
@@ -219,8 +208,7 @@ describe('All Auth Tests', () => {
                   let newMediaSettings = {
                     title: `new title ${Math.random()}`,
                     description: `new description ${Math.random()}`,
-                    category: `new category ${Math.random()}`,
-                    type: `new type ${Math.random()}`,
+                    category: `fun`
                   };
                   // updated the media
                   superagent.put(updateUrl)
@@ -261,10 +249,8 @@ describe('All Auth Tests', () => {
               let newMedia = {
                 title: `Test Title: ${Math.random()}`,
                 description: `Test Description: ${Math.random()}`,
-                category: `Test Category: ${Math.random()}`,
-                type: `Test Type: ${Math.random()}`,
+                category: `fun`,
                 userId: userId,
-                public: false
               };
               // post new media
               let uploadUrl = `http://localhost:${process.env.PORT}/api/media`;
@@ -272,7 +258,6 @@ describe('All Auth Tests', () => {
                 .field('title', newMedia.title)
                 .field('description', newMedia.description)
                 .field('category', newMedia.category)
-                .field('type', newMedia.type)
                 .field('userId', userId)
                 .set('Authorization', 'Bearer ' + token)
                 .attach('media', mediaLocation)
@@ -283,7 +268,6 @@ describe('All Auth Tests', () => {
                   superagent.delete(deleteUrl)
                     .set('Authorization', 'Bearer ' + token)
                     .end((err, res) => {
-                      console.log('delete res status', res.status);
                       expect(res.status).toBe(204);
                       done();
                     });
