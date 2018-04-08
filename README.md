@@ -119,7 +119,7 @@ RETURNS ONW media resource
 
 
 # User Stories
-4 stories total.
+12 stories total.
 3 roles defined.
 
 ## Problem to be Solved
