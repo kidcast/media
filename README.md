@@ -48,7 +48,7 @@ RETURN
     "__v": 0
     }
 ```
---> assigns the user a _basic authorization_ id and hashed password
+--> assigns the user a *basic authorization* id and hashed password
 
 
 /api/signin
@@ -56,7 +56,7 @@ RETURN
     set postman to _basic auth_
     input username and password
 
-    --> return *bearer authorization* token
+--> return *bearer authorization* token
 
 
 Proceede to Sign In
@@ -65,10 +65,10 @@ Proceede to Sign In
 #### Create new media
 /api/media
 
-    set postman to _bearer auth_
-    input token in authorization field
+set postman to _bearer auth_
+input token in authorization field
 
-    **input required keys/values**
+**input required keys/values**
 ```
     media <file to be uploaded>
     title <file title>
@@ -77,9 +77,9 @@ Proceede to Sign In
     category <select Fun, Educational or Instructional>
     type <media type (video, audio)>
 ```
-    **SEND**
+**SEND**
     
-    --> uploads file to database
+--> uploads file to database
 
 
 ### GET All
