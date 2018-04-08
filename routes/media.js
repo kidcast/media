@@ -25,11 +25,21 @@ const router = express.Router();
 router.get('/', (req, res) => {
   if (req.query.id) {
     Media.findOne({ _id: req.query.id }, (err, media) => {
-      res.send(media);
+      if (media.public) {
+        res.send(media);
+      } else {
+        res.status(400);
+        res.send('Bad Request. Media Request is Pending Approval');
+      }
     });
   } else {
     Media.find().then(media => {
-      res.send(media);
+      let publicMedia = media.filter(mediaItem => {
+        if (mediaItem.public) {
+          return mediaItem;
+        }
+      });
+      res.send(publicMedia);
     });
   }
 });
