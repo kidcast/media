@@ -37,7 +37,7 @@ describe('All Auth Tests', () => {
             .auth(signUpBody.username, signUpBody.password)
             .end((err, res) => {
               let token = res.body.token;
-              let mediaLocation = './uploads/kidMusic.png';
+              let mediaLocation = './uploads/child-running-in-playground.mp4';
               let newMedia = {
                 title: `Test Title: ${Math.random()}`,
                 description: `Test Description: ${Math.random()}`,
@@ -59,7 +59,6 @@ describe('All Auth Tests', () => {
                 .end((err, res) => {
                   let getUrl = `http://localhost:${process.env.PORT}/api/media`;
                   superagent.get(getUrl)
-                    .set('Authorization', 'Bearer ' + token)
                     .end((err, res) => {
                       let isAnArray = Array.isArray(res.body);
                       expect(isAnArray).toBe(true);
@@ -91,7 +90,7 @@ describe('All Auth Tests', () => {
             .auth(signUpBody.username, signUpBody.password)
             .end((err, res) => {
               let token = res.body.token;
-              let mediaLocation = './uploads/kidMusic.png';
+              let mediaLocation = './uploads/child-running-in-playground.mp4';
               let newMedia = {
                 title: `Test Title: ${Math.random()}`,
                 description: `Test Description: ${Math.random()}`,
@@ -146,7 +145,7 @@ describe('All Auth Tests', () => {
             .auth(signUpBody.username, signUpBody.password)
             .end((err, res) => {
               let token = res.body.token;
-              let mediaLocation = './uploads/kidMusic.png';
+              let mediaLocation = './uploads/child-running-in-playground.mp4';
               let newMedia = {
                 title: `Test Title: ${Math.random()}`,
                 description: `Test Description: ${Math.random()}`,
@@ -196,7 +195,7 @@ describe('All Auth Tests', () => {
             .auth(signUpBody.username, signUpBody.password)
             .end((err, res) => {
               let token = res.body.token;
-              let mediaLocation = './uploads/kidMusic.png';
+              let mediaLocation = './uploads/child-running-in-playground.mp4';
               let newMedia = {
                 title: `Test Title: ${Math.random()}`,
                 description: `Test Description: ${Math.random()}`,
@@ -259,7 +258,7 @@ describe('All Auth Tests', () => {
             .auth(signUpBody.username, signUpBody.password)
             .end((err, res) => {
               let token = res.body.token;
-              let mediaLocation = './uploads/kidMusic.png';
+              let mediaLocation = './uploads/child-running-in-playground.mp4';
               let newMedia = {
                 title: `Test Title: ${Math.random()}`,
                 description: `Test Description: ${Math.random()}`,
