@@ -15,7 +15,7 @@ describe('All Auth Tests', () => {
   beforeAll(server.start);
   afterAll(server.stop);
 
-  describe('Media Sunny Day Requests', () => {
+  describe('Media Requests', () => {
 
     it('should return 200 for a get request for all media resources', done => {
       //sign Up
@@ -70,7 +70,7 @@ describe('All Auth Tests', () => {
         });
     });
 
-    it('should return 200 for a get request for one media resource', done => {
+    it('should return 400 for a get request for one media resource that is not set to public', done => {
       //sign Up
       let signUpUrl = `http://localhost:${process.env.PORT}/api/signup`;
       let signUpBody = {
@@ -114,11 +114,9 @@ describe('All Auth Tests', () => {
                   let amazonUrl = res.body.mediaUrl;
                   let getUrl = `http://localhost:${process.env.PORT}/api/media?id=${res.body._id}`;
                   superagent.get(getUrl)
-                    .set('Authorization', 'Bearer ' + token)
                     .end((err, res) => {
-                      let fetchedAmazonUrl = res.body.mediaUrl;
-                      expect(fetchedAmazonUrl).toBe(amazonUrl);
-                      expect(res.status).toBe(200);
+                      console.log('res.status', res.status);
+                      expect(res.status).toBe(400);
                       done();
                     });
                 });
@@ -285,6 +283,7 @@ describe('All Auth Tests', () => {
                   superagent.delete(deleteUrl)
                     .set('Authorization', 'Bearer ' + token)
                     .end((err, res) => {
+                      console.log('delete res status', res.status);
                       expect(res.status).toBe(204);
                       done();
                     });
