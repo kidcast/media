@@ -5,6 +5,7 @@ const server = require('../server.js');
 require('dotenv').config();
 
 const superagent = require('superagent');
+const bcrypt = require('bcrypt');
 const PORT = process.env.PORT || 3000;
 const SERVER_URL = 'http://localhost:' + PORT;
 const SIGNUP_URL = SERVER_URL + '/api/signup';
