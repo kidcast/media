@@ -93,9 +93,6 @@ router.put('/', bearerMiddlewear, function (req, res) {
       _id: req.query.id
     })
     .then(media => {
-      console.log('compairing user ids in router PUT', req.user._id, media.userId);
-      console.log('checking req user _id type', typeof req.user._id);
-      console.log('checking req media for user id type', typeof media.userId);
       if (req.user._id.toString() === media.userId.toString()) {
         Media.findOneAndUpdate({
           _id: req.query.id
@@ -108,6 +105,7 @@ router.put('/', bearerMiddlewear, function (req, res) {
           Media.findOne({
             _id: req.query.id
           }).then(media => {
+            res.status(200);
             res.send(media);
           });
         });
@@ -119,11 +117,20 @@ router.put('/', bearerMiddlewear, function (req, res) {
 });
 
 router.delete('/', bearerMiddlewear, function (req, res) {
-  Media.remove({
+  Media.findOne({
     _id: req.query.id
-  }, (err, media) => {
-    res.status(204);
-    res.send('Deleted Successfully');
+  })
+  .then(media => {
+  if (req.user._id.toString() === media.userId.toString()) {
+    Media.remove({
+      _id: req.query.id
+    }, (err, media) => {
+      res.status(204).send({message: 'Deleted Successfully'});
+    });
+  } else {
+    res.status(403);
+    res.send('sorry, you do not have access to delete this content');
+  }
   });
 });
 
