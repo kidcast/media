@@ -12,6 +12,7 @@ router.post('/signup', express.json(), (req, res) => {
   if (req.body.isAdmin === true) {
     res.status(403);
     res.send('Not Allowed');
+    return;
   };
   User.create(req.body)
     .then((user) => {

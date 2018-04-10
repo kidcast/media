@@ -626,6 +626,21 @@ describe('All Auth Tests', () => {
   };
 
   describe('/api/signup', () => {
+
+    it('should return status 403 if new account POST body contains isAdmin: true', (done) => {
+      let params = getUserParams();
+      params.isAdmin = true;
+
+      superagent.post(SIGNUP_URL)
+        .auth(params.username, params.password)
+        .set('Content-Type', 'application/json')
+        .send(params)
+        .end((err, res) => {
+          expect(res.status).toEqual(403);
+          done();
+        });
+    });
+
     it('should return status 400 if missing username', (done) => {
       let params = getUserParams();
       delete params['username'];
