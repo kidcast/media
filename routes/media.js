@@ -153,7 +153,7 @@ router.delete('/', bearerMiddlewear, function (req, res) {
     _id: req.query.id
   })
     .then(media => {
-      if (req.user._id.toString() === media.userId.toString()) {
+      if (req.user._id.toString() === media.userId.toString() | req.user.isAdmin) {
         Media.remove({
           _id: req.query.id
         }, (err, media) => {
