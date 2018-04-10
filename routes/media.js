@@ -47,6 +47,16 @@ router.get('/', (req, res) => {
       res.status(200);
       res.send(publicMedia);
     });
+  } else if (req.query.userId) {
+    Media.find({userId: req.query.userId}, (err, media) => {
+      let publicMedia = media.filter(mediaItem => {
+        if (mediaItem.public) {
+          return mediaItem;
+        };
+      });
+      res.status(200);
+      res.send(publicMedia);
+    });
   } else {
     Media.find((err, media) => {
       console.log('router.get else media');
