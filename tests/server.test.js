@@ -69,7 +69,7 @@ describe('All Auth Tests', () => {
         });
     });
 
-    it('should return 200 for a GET request for one particular category and shouldd return an array', done => {
+    it('should return an array for a GET request for one particular category', done => {
       //sign Up
       let signUpUrl = `http://localhost:${process.env.PORT}/api/signup`;
       let signUpBody = {
@@ -112,7 +112,56 @@ describe('All Auth Tests', () => {
                     .end((err, res) => {
                       let isAnArray = Array.isArray(res.body);
                       expect(isAnArray).toBe(true);
-                      // expect(res.status).toBe(200);
+                      done();
+                    });
+                });
+            });
+        });
+    });
+
+    it('should return an array for a GET request for when filtering for one particular userId', done => {
+      //sign Up
+      let signUpUrl = `http://localhost:${process.env.PORT}/api/signup`;
+      let signUpBody = {
+        username: `randomUserTest${Math.random()}`,
+        password: `randomPasswordTest${Math.random()}`,
+        email: `${Math.random()}@email.com`
+      };
+      superagent.post(signUpUrl)
+        .send(signUpBody)
+        .end((err, res) => {
+          if (err) {
+            console.error('sign up error:', err);
+          }
+          let userId = res.body._id;
+          //Sign In
+          let signInUrl = `http://localhost:${process.env.PORT}/api/signin`;
+          superagent.get(signInUrl)
+            .auth(signUpBody.username, signUpBody.password)
+            .end((err, res) => {
+              let token = res.body.token;
+              let mediaLocation = './uploads/child-running-in-playground.mp4';
+              let newMedia = {
+                title: `Test Title: ${Math.random()}`,
+                description: `Test Description: ${Math.random()}`,
+                category: `fun`,
+                userId: userId,
+              };
+              // post new media
+              let requestUrl = `http://localhost:${process.env.PORT}/api/media`;
+              superagent.post(requestUrl)
+                .field('title', newMedia.title)
+                .field('description', newMedia.description)
+                .field('category', newMedia.category)
+                .field('userId', userId)
+                .set('Authorization', 'Bearer ' + token)
+                .attach('media', mediaLocation)
+                .end((err, res) => {
+                  let getUrl = `http://localhost:${process.env.PORT}/api/media?userId=${userId}`;
+                  superagent.get(getUrl)
+                    .end((err, res) => {
+                      let isAnArray = Array.isArray(res.body);
+                      expect(isAnArray).toBe(true);
                       done();
                     });
                 });
