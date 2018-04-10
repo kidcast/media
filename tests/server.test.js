@@ -19,7 +19,7 @@ describe('All Auth Tests', () => {
 
   describe('Media Requests', () => {
 
-    it('should return 200 for a get request for all media resources', done => {
+    it('should return 200 for a GET request for all media resources', done => {
       //sign Up
       let signUpUrl = `http://localhost:${process.env.PORT}/api/signup`;
       let signUpBody = {
@@ -69,7 +69,7 @@ describe('All Auth Tests', () => {
         });
     });
 
-    it('should return 400 for a get request for one media resource that is not set to public', done => {
+    it('should return 400 for a GET request for one media resource that is not set to public', done => {
       //sign Up
       let signUpUrl = `http://localhost:${process.env.PORT}/api/signup`;
       let signUpBody = {
@@ -119,7 +119,7 @@ describe('All Auth Tests', () => {
         });
     });
 
-    it('should return 200 for uploading a media resource and include proper AWS url', done => {
+    it('should return 200 for POST request to uploading a media resource and include proper AWS url', done => {
       //sign Up
       let signUpUrl = `http://localhost:${process.env.PORT}/api/signup`;
       let signUpBody = {
@@ -160,6 +160,50 @@ describe('All Auth Tests', () => {
                   let isAmazonUrl = res.body.mediaUrl.includes(amazonUrl);
                   expect(isAmazonUrl).toBe(true);
                   expect(res.status).toBe(200);
+                  done();
+                });
+            });
+        });
+    });
+
+    it('should return 400 for POST request with the incorrect category', done => {
+      //sign Up
+      let signUpUrl = `http://localhost:${process.env.PORT}/api/signup`;
+      let signUpBody = {
+        username: `randomUserTest${Math.random()}`,
+        password: `randomPasswordTest${Math.random()}`,
+        email: `${Math.random()}@email.com`
+      };
+      superagent.post(signUpUrl)
+        .auth(signUpBody.username, signUpBody.password)
+        .set('Content-Type', 'application/json')
+        .send(JSON.stringify(signUpBody))
+        .end((err, res) => {
+          let userId = res.body._id;
+          //Sign In
+          let signInUrl = `http://localhost:${process.env.PORT}/api/signin`;
+          superagent.get(signInUrl)
+            .auth(signUpBody.username, signUpBody.password)
+            .end((err, res) => {
+              let token = res.body.token;
+              let mediaLocation = './uploads/child-running-in-playground.mp4';
+              let newMedia = {
+                title: `Test Title: ${Math.random()}`,
+                description: `Test Description: ${Math.random()}`,
+                category: `wrong category`,
+                userId: userId,
+              };
+              // post new media
+              let uploadUrl = `http://localhost:${process.env.PORT}/api/media`;
+              superagent.post(uploadUrl)
+                .field('title', newMedia.title)
+                .field('description', newMedia.description)
+                .field('category', newMedia.category)
+                .field('userId', userId)
+                .set('Authorization', 'Bearer ' + token)
+                .attach('media', mediaLocation)
+                .end((err, res) => {
+                  expect(res.status).toBe(400);
                   done();
                 });
             });
