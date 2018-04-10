@@ -37,8 +37,17 @@ router.get('/', (req, res) => {
         res.send('Bad Request. Media Request is Pending Approval');
       }
     });
+  } else if (req.query.category) {
+    Media.find({category: req.query.category}, (err, media) => {
+      let publicMedia = media.filter(mediaItem => {
+        if (mediaItem.public) {
+          return mediaItem;
+        };
+      });
+      res.status(200);
+      res.send(publicMedia);
+    });
   } else {
-    console.log('in router.get else');
     Media.find((err, media) => {
       console.log('router.get else media');
       let publicMedia = media.filter(mediaItem => {
@@ -46,6 +55,7 @@ router.get('/', (req, res) => {
           return mediaItem;
         };
       });
+      res.status(200);
       res.send(publicMedia);
     }).catch(err => {
       console.error(err);
