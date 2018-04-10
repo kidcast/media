@@ -10,7 +10,9 @@ const express = require('express');
 const path = require('path');
 
 const multer = require('multer');
-const upload = multer({ dest: 'uploads/' });
+const upload = multer({
+  dest: 'uploads/'
+});
 const mongoose = require('mongoose');
 
 
@@ -24,7 +26,9 @@ const router = express.Router();
 
 router.get('/', (req, res) => {
   if (req.query.id) {
-    Media.findOne({ _id: req.query.id }, (err, media) => {
+    Media.findOne({
+      _id: req.query.id
+    }, (err, media) => {
       if (media.public) {
         res.send(media);
       } else {
@@ -46,6 +50,10 @@ router.get('/', (req, res) => {
 
 router.post('/', bearerMiddlewear, upload.single('media'), function (req, res) {
   let ext = path.extname(req.file.originalname).toLowerCase();
+  if (req.body.userId === undefined || req.body.userId === null) {
+    res.status(400);
+    res.send('missing userId key in the request body')
+  }
   if (req.body.category === 'fun' || req.body.category === 'educational') {
     if (ext === '.mp4' || ext === '.mov' || ext === 'm4v') {
       let params = {
@@ -80,22 +88,49 @@ router.post('/', bearerMiddlewear, upload.single('media'), function (req, res) {
 });
 
 router.put('/', bearerMiddlewear, function (req, res) {
-  Media.findOneAndUpdate({_id: req.query.id}, {
-    title: req.body.title,
-    description: req.body.description,
-    category: req.body.category,
-    type: req.body.type
-  }, (err, media) => {
-    Media.findOne({_id: req.query.id}).then(media => {
-      res.send(media);
+  console.log('in router PUT', req.user)
+  Media.findOne({
+      _id: req.query.id
+    })
+    .then(media => {
+      if (req.user._id.toString() === media.userId.toString()) {
+        Media.findOneAndUpdate({
+          _id: req.query.id
+        }, {
+          title: req.body.title,
+          description: req.body.description,
+          category: req.body.category,
+          type: req.body.type
+        }, (err, media) => {
+          Media.findOne({
+            _id: req.query.id
+          }).then(media => {
+            res.status(200);
+            res.send(media);
+          });
+        });
+      } else {
+        res.status(403);
+        res.send('sorry, you do not have access to update this content');
+      }
     });
-  });
 });
 
 router.delete('/', bearerMiddlewear, function (req, res) {
-  Media.remove({_id: req.query.id}, (err, media) => {
-    res.status(204);
-    res.send('Deleted Successfully');
+  Media.findOne({
+    _id: req.query.id
+  })
+  .then(media => {
+  if (req.user._id.toString() === media.userId.toString()) {
+    Media.remove({
+      _id: req.query.id
+    }, (err, media) => {
+      res.status(204).send({message: 'Deleted Successfully'});
+    });
+  } else {
+    res.status(403);
+    res.send('sorry, you do not have access to delete this content');
+  }
   });
 });
 
