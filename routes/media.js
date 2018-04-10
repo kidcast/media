@@ -14,13 +14,14 @@ const upload = multer({
   dest: 'uploads/'
 });
 const mongoose = require('mongoose');
-
+const mongone = require('../library/mongone.js');
 
 const Media = require('../models/media.js');
 
 const bearerMiddlewear = require('../library/bearer-middleware');
 
 const DATABASE_URL = process.env.MONGODB_URI || 'mongodb://localhost:27017/kidcast';
+
 mongoose.connect(DATABASE_URL);
 const router = express.Router();
 
@@ -37,22 +38,26 @@ router.get('/', (req, res) => {
       }
     });
   } else {
-    Media.find().then(media => {
+    console.log('in router.get else');
+    Media.find((err, media) => {
+      console.log('router.get else media');
       let publicMedia = media.filter(mediaItem => {
         if (mediaItem.public) {
           return mediaItem;
-        }
+        };
       });
       res.send(publicMedia);
+    }).catch(err => {
+      console.error(err);
     });
   }
 });
 
 router.post('/', bearerMiddlewear, upload.single('media'), function (req, res) {
   let ext = path.extname(req.file.originalname).toLowerCase();
-  if (req.body.userId === undefined || req.body.userId === null) {
+  if (req.user._id === undefined || req.user._id === null) {
     res.status(400);
-    res.send('missing userId key in the request body')
+    res.send('Invalid Credentials');
   }
   if (req.body.category === 'fun' || req.body.category === 'educational') {
     if (ext === '.mp4' || ext === '.mov' || ext === 'm4v') {
@@ -67,13 +72,14 @@ router.post('/', bearerMiddlewear, upload.single('media'), function (req, res) {
           title: req.body.title,
           description: req.body.description,
           mediaUrl: s3Data.Location,
-          userId: req.body.userId,
+          userId: req.user._id,
           category: req.body.category,
           type: req.body.type,
           public: false
         });
         media.save()
           .then(media => {
+            res.status(200);
             res.send(media);
           });
       });
@@ -88,11 +94,11 @@ router.post('/', bearerMiddlewear, upload.single('media'), function (req, res) {
 });
 
 router.put('/', bearerMiddlewear, function (req, res) {
-  console.log('in router PUT', req.user)
   Media.findOne({
-      _id: req.query.id
-    })
+    _id: req.query.id
+  })
     .then(media => {
+      console.log('req id', req.user._id, 'media id', media.userId);
       if (req.user._id.toString() === media.userId.toString()) {
         Media.findOneAndUpdate({
           _id: req.query.id
@@ -107,12 +113,17 @@ router.put('/', bearerMiddlewear, function (req, res) {
           }).then(media => {
             res.status(200);
             res.send(media);
+          }).catch((err) => {
+            console.error(err);
           });
         });
       } else {
         res.status(403);
         res.send('sorry, you do not have access to update this content');
       }
+    }).catch((err) => {
+      res.status(400);
+      res.send('bad request');
     });
 });
 
@@ -120,18 +131,18 @@ router.delete('/', bearerMiddlewear, function (req, res) {
   Media.findOne({
     _id: req.query.id
   })
-  .then(media => {
-  if (req.user._id.toString() === media.userId.toString()) {
-    Media.remove({
-      _id: req.query.id
-    }, (err, media) => {
-      res.status(204).send({message: 'Deleted Successfully'});
+    .then(media => {
+      if (req.user._id.toString() === media.userId.toString()) {
+        Media.remove({
+          _id: req.query.id
+        }, (err, media) => {
+          res.status(204).send({ message: 'Deleted Successfully' });
+        });
+      } else {
+        res.status(403);
+        res.send('sorry, you do not have access to delete this content');
+      }
     });
-  } else {
-    res.status(403);
-    res.send('sorry, you do not have access to delete this content');
-  }
-  });
 });
 
 

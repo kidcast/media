@@ -35,7 +35,7 @@
   "homepage": "https://github.com/kidcast/media#readme",
   "jest": {
     "collectCoverage": true,
-    "coveragePathIgnorePatterns": ["coverage/"],
+    "coveragePathIgnorePatterns": ["coverage/", "mongone.js"],
     "collectCoverageFrom": ["**/**.js"]
   }
 }
