@@ -122,7 +122,8 @@ router.put('/', bearerMiddlewear, function (req, res) {
         res.send('sorry, you do not have access to update this content');
       }
     }).catch((err) => {
-      console.error(err);
+      res.status(400);
+      res.send('bad request');
     });
 });
 
