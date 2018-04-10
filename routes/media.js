@@ -114,12 +114,13 @@ router.post('/', bearerMiddlewear, upload.single('media'), function (req, res) {
 });
 
 router.put('/', bearerMiddlewear, function (req, res) {
+  console.log('router.put req user after middlewear fires', req.user);
   Media.findOne({
     _id: req.query.id
   })
     .then(media => {
       console.log('req id', req.user._id, 'media id', media.userId);
-      if (req.user._id.toString() === media.userId.toString()) {
+      if (req.user._id.toString() === media.userId.toString() || req.user.isAdmin) {
         Media.findOneAndUpdate({
           _id: req.query.id
         }, {
@@ -152,7 +153,7 @@ router.delete('/', bearerMiddlewear, function (req, res) {
     _id: req.query.id
   })
     .then(media => {
-      if (req.user._id.toString() === media.userId.toString()) {
+      if (req.user._id.toString() === media.userId.toString() | req.user.isAdmin) {
         Media.remove({
           _id: req.query.id
         }, (err, media) => {
