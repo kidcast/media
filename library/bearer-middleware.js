@@ -13,6 +13,7 @@ function processBearer(req, res, next) {
     User.findOne({_id: decoded.userId })
       .then(user => {
         req.user = user;
+        console.log('in barer-middleware', req.user);
         next();
       })
       .catch(err => res.send(err.message));
