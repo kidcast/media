@@ -46,31 +46,36 @@ router.get('/', (req, res) => {
 
 router.post('/', bearerMiddlewear, upload.single('media'), function (req, res) {
   let ext = path.extname(req.file.originalname).toLowerCase();
-  if (ext === '.mp4' || ext === '.mov' || ext === 'm4v') {
-    let params = {
-      ACL: 'public-read',
-      Bucket: process.env.AWS_BUCKET,
-      Key: req.file.originalname,
-      Body: fs.createReadStream(req.file.path)
-    };
-    s3.upload(params, (err, s3Data) => {
-      let media = new Media({
-        title: req.body.title,
-        description: req.body.description,
-        mediaUrl: s3Data.Location,
-        userId: req.body.userId,
-        category: req.body.category,
-        type: req.body.type,
-        public: false
-      });
-      media.save()
-        .then(media => {
-          res.send(media);
+  if (req.body.category === 'fun' || req.body.category === 'educational') {
+    if (ext === '.mp4' || ext === '.mov' || ext === 'm4v') {
+      let params = {
+        ACL: 'public-read',
+        Bucket: process.env.AWS_BUCKET,
+        Key: req.file.originalname,
+        Body: fs.createReadStream(req.file.path)
+      };
+      s3.upload(params, (err, s3Data) => {
+        let media = new Media({
+          title: req.body.title,
+          description: req.body.description,
+          mediaUrl: s3Data.Location,
+          userId: req.body.userId,
+          category: req.body.category,
+          type: req.body.type,
+          public: false
         });
-    });
+        media.save()
+          .then(media => {
+            res.send(media);
+          });
+      });
+    } else {
+      res.status(404);
+      res.send('Bad Request. Please Only Upload mp4, mov, or m4v files');
+    }
   } else {
-    res.status(404);
-    res.send('Bad Request. Please Only Upload mp4, mov, or m4v files');
+    res.status(400);
+    res.send('Bad Request. Available categories: fun, educational');
   }
 });
 

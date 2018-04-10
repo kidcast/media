@@ -11,7 +11,6 @@ const router = express.Router();
 router.post('/signup', express.json(), (req, res) => {
   User.create(req.body)
     .then((user) => {
-      console.error('created user', user);
       res.status(200);
       res.send(user);
     })
