@@ -20,7 +20,6 @@ router.post('/signup', express.json(), (req, res) => {
     res.send('Invaid Email');
     return;
   }
-  callback(emailRegex.test(email), message);
   User.create(req.body)
     .then((user) => {
       res.status(200);

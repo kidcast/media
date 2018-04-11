@@ -119,7 +119,6 @@ router.put('/', bearerMiddlewear, function (req, res) {
     _id: req.query.id
   })
     .then(media => {
-      console.log('req id', req.user._id, 'media id', media.userId);
       if (req.user._id.toString() === media.userId.toString() || req.user.isAdmin) {
         Media.findOneAndUpdate({
           _id: req.query.id
