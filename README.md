@@ -1,45 +1,40 @@
-# KidCast
-### Kid friendly, parent approved, media resource tool.
 
+# KidCast
+
+### Kid friendly, parent approved, media resource tool.
 **Version**: 1.1.0 Our first release of the KidCast application
+***
+
+## Table of Content
+* [Team Members](#Team-Members)
+* [Overview](#Overview)
+* [How to Use Our App](#How-to-Use-Our-App)
+***
 
 ## Team Members
 * Amber Kim https://github.com/amgranad :innocent:
 * Brandon Buchholz https://github.com/bjbuchholz :neckbeard:
 * Eric Cobb https://github.com/sonsofdesert :wolf:
 * Ryan Johnson  https://github.com/rjtj2007 :evergreen_tree:
+***
 
 ## Overview
-A back-end server that displays kid centered, safe, searchable, parent-approved content for kids.
+A back-end server that contains kid centered, safe, searchable, parent-approved video content for kids.
+***
 
-## Get started - User
+## How to Use Our App
 
-* Click this [link to KidCast](https://kidcast.herokuapp.com)
+#### Sample POST Request to create a new user
 
-* Sign Up by entering a new username, password and email
-
-* Sign In using your new username and password
-
-* Upload media content to site
-
-* Search through other user content
-
-## API End Points
-User will need to download [Postman](https://www.getpostman.com/) and install the application onto their computer. 
-
-### POST
-#### Create new user
-
-/api/signup
-```
+https://kidcast.herokuapp.com/api/signup
+``` json
     {
-	"username": "<unique username>",
+    "username": "<unique username>",
     "email": "<email address>",
     "password": "<password>"
     }
-```
-RETURN
-```
+
+    RETURN
     {
     "_id": "<hashed user id>",
     "username": "<username>",
@@ -48,18 +43,15 @@ RETURN
     "__v": 0
     }
 ```
---> assigns the user a *basic authorization* id and hashed password
+--> assigns the user a *basic authorization* id and hashed password to a new user
 
+**Proceede to Sign In**
 
-/api/signin
+https://kidcast.herokuapp.com/api/signin
 
-    set postman to _basic auth_
-    input username and password
+    sign in using your unique username, email and password
 
 --> return *bearer authorization* token
-
-
-Proceede to Sign In
 
 ### POST
 #### Create new media
@@ -70,12 +62,14 @@ input token in authorization field
 
 **input required keys/values**
 ```
+
     media <file to be uploaded>
     title <file title>
     description <file description>
     userId <unique user id from basic auth>
     category <select Fun, Educational or Instructional>
     type <media type (video, audio)>
+
 ```
 **SEND**
     
@@ -88,7 +82,7 @@ input token in authorization field
 /api/media
 
 RETURNS ALL available media resources
-```
+```json
     {
     "public": <true or false>,
     "_id": "<hashed user id>",
@@ -118,14 +112,13 @@ RETURNS ONE media resource
 
 
 
+## Problem to be Solved
+There are a lot of resources for kids content like youtube that have video content, but it is not always parent approved. With kidcast the parent has control of the content that your kiddo is viewing and have peace of mind that it is safe and approved by the parents.
 
 
 # User Stories
 12 stories total.
 3 roles defined.
-
-## Problem to be Solved
-There are a lot of resources for kids content like youtube that have video content, but it is not always parent approved. With kidcast the parent has control of the content that your kiddo is viewing and have peace of mind that it is safe and approved by the parents.
 
 ## By Role
 
