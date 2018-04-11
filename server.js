@@ -23,9 +23,8 @@ server.start = () => {
   return new Promise((resolve, reject) => {
     if(server.isOn) return reject(new Error('Server Error. Server already running.'));
     server.http = app.listen(process.env.PORT, () => {
-      console.log(`Listening on ${process.env.PORT}`);
+      console.info(`Listening on ${process.env.PORT}`);
       server.isOn = true;
-      // mongoose.connect(process.env.MONGODB_URI);
       return resolve(server);
     });
   });
@@ -35,7 +34,6 @@ server.stop = () => {
     if(!server.isOn) return reject(new Error('Server Error. Server already stopped.'));
     server.http.close(() => {
       server.isOn = false;
-      // mongoose.disconnect();
       return resolve();
     });
   });

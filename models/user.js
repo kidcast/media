@@ -6,17 +6,31 @@ const Media = require('./media.js');
 const jwt = require('jsonwebtoken');
 
 let userSchema = new mongoose.Schema({
-  username: { type: String, required: true, unique: true},
-  email: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
-  isAdmin: {type: Boolean, default: false}
+  username: { 
+    type: String, 
+    required: true, 
+    unique: true 
+  },
+  email: {
+    type: String,
+    required: true,
+    unique: true
+  },
+  password: { 
+    type: String, 
+    required: true 
+  },
+  isAdmin: { 
+    type: Boolean, 
+    default: false 
+  }
 });
 
-userSchema.methods.checkPassword = function(attempt) {
+userSchema.methods.checkPassword = function (attempt) {
   return bcrypt.compare(attempt, this.password);
 };
-   
-userSchema.pre('save', function(next) {
+
+userSchema.pre('save', function (next) {
   if (this.isNew) {
     bcrypt.hash(this.password, 10).then(hash => {
       this.password = hash;
