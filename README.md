@@ -53,9 +53,8 @@ https://kidcast.herokuapp.com/api/signin
 
 --> return *bearer authorization* token
 
-### POST
-#### Create new media
-/api/media
+#### Sample POST request to create new media content
+https://kidcast.herokuapp.com/api/media
 
 set postman to _bearer auth_
 input token in authorization field
@@ -79,7 +78,7 @@ input token in authorization field
 ### GET All
 #### Retreve media
 
-/api/media
+https://kidcast.herokuapp.com/api/media
 
 RETURNS ALL available media resources
 ```json
@@ -99,7 +98,7 @@ RETURNS ALL available media resources
 ### GET ONE
 #### Retreve media
 
-/api/media?id=
+https://kidcast.herokuapp.com/api/media?id=<_id>
 
 RETURNS ONE media resource
 
