@@ -14,6 +14,12 @@ router.post('/signup', express.json(), (req, res) => {
     res.send('Not Allowed');
     return;
   };
+  let emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  if (!emailRegex.test(req.body.email)) {
+    res.status(400);
+    res.send('Invaid Email');
+    return;
+  }
   User.create(req.body)
     .then((user) => {
       res.status(200);
@@ -32,7 +38,7 @@ router.get('/signin', (req, res) => {
   }).then(user => {
     user.checkPassword(password).then(result => {
       if (result) {
-        let data = {userId: user._id};
+        let data = { userId: user._id };
         let token = jwt.sign(data, process.env.SECRET, (err, newToken) => {
           res.status(200);
           res.send({

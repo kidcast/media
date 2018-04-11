@@ -79,8 +79,8 @@ router.post('/', bearerMiddlewear, upload.single('media'), function (req, res) {
     res.status(400);
     res.send('Invalid Credentials');
   }
-  if (req.body.category === 'fun' || req.body.category === 'educational') {
-    if (ext === '.mp4' || ext === '.mov' || ext === 'm4v') {
+  if (req.body.category === 'fun' || req.body.category === 'education') {
+    if (ext === '.mp4' || ext === '.mov' || ext === '.m4v') {
       let params = {
         ACL: 'public-read',
         Bucket: process.env.AWS_BUCKET,
@@ -119,7 +119,6 @@ router.put('/', bearerMiddlewear, function (req, res) {
     _id: req.query.id
   })
     .then(media => {
-      console.log('req id', req.user._id, 'media id', media.userId);
       if (req.user._id.toString() === media.userId.toString() || req.user.isAdmin) {
         Media.findOneAndUpdate({
           _id: req.query.id
