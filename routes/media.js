@@ -59,7 +59,6 @@ router.get('/', (req, res) => {
     });
   } else {
     Media.find((err, media) => {
-      console.log('router.get else media');
       let publicMedia = media.filter(mediaItem => {
         if (mediaItem.public) {
           return mediaItem;
@@ -114,7 +113,6 @@ router.post('/', bearerMiddlewear, upload.single('media'), function (req, res) {
 });
 
 router.put('/', bearerMiddlewear, function (req, res) {
-  console.log('router.put req user after middlewear fires', req.user);
   Media.findOne({
     _id: req.query.id
   })
@@ -156,12 +154,20 @@ router.delete('/', bearerMiddlewear, function (req, res) {
         Media.remove({
           _id: req.query.id
         }, (err, media) => {
-          res.status(204).send({ message: 'Deleted Successfully' });
+          res.status(204);
+          res.send();
+        }).catch(err => {
+          res.status(400);
+          res.send('Unable to remove resource');
         });
       } else {
         res.status(403);
         res.send('sorry, you do not have access to delete this content');
       }
+    })
+    .catch(err => {
+      res.status(400);
+      res.send('Cannot find resource');
     });
 });
 
