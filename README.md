@@ -48,6 +48,8 @@ There are a lot of resources for kids content like youtube that have video conte
 
 ## How to Use Our API
 
+[Click to View our Diagram Overview](https://github.com/kidcast/media/blob/master/kidcast-backend-diagram.pdf)
+
 #### Sample POST Request to create a new user
 
 `https://kidcast.herokuapp.com/api/signup`
