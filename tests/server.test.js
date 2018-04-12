@@ -562,14 +562,12 @@ describe('All Auth Tests', () => {
           superagent.get(signInUrl)
             .auth(signUpBody.username, signUpBody.password)
             .end((err, res) => {
-              // console.log('res user after signed in', res.user);
               let token = res.body.token;
               let mediaLocation = './uploads/child-running-in-playground.mp4';
               let newMedia = {
                 title: `Test Title: ${Math.random()}`,
                 description: `Test Description: ${Math.random()}`,
                 category: `fun`,
-                // userId: userId,
               };
               // post new media
               let uploadUrl = `http://localhost:${process.env.PORT}/api/media`;
@@ -683,7 +681,6 @@ describe('All Auth Tests', () => {
           superagent.get(signInUrl)
             .auth(signUpBody.username, signUpBody.password)
             .end((err, res) => {
-              // console.log('res user after signed in', res.user);
               let token = res.body.token;
               let deleteUrl = `http://localhost:${process.env.PORT}/api/media?id=1234`;
               // updated the media

@@ -23,7 +23,13 @@ router.post('/signup', express.json(), (req, res) => {
   User.create(req.body)
     .then((user) => {
       res.status(200);
-      res.send(user);
+      res.send({
+        message: 'Account has been successfully created',
+        _id: user._id,
+        isAdmin: user.isAdmin,
+        username: user.username,
+        email: user.email
+      });
     })
     .catch((err) => {
       console.error('user not created', err);

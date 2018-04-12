@@ -108,41 +108,45 @@ router.post('/', bearerMiddlewear, upload.single('media'), function (req, res) {
     }
   } else {
     res.status(400);
-    res.send('Bad Request. Available categories: fun, educational');
+    res.send('Bad Request. Available categories: fun, education');
   }
 });
 
 router.put('/', bearerMiddlewear, function (req, res) {
-  Media.findOne({
-    _id: req.query.id
-  })
-    .then(media => {
-      if (req.user._id.toString() === media.userId.toString() || req.user.isAdmin) {
-        Media.findOneAndUpdate({
-          _id: req.query.id
-        }, {
-          title: req.body.title,
-          description: req.body.description,
-          category: req.body.category,
-          type: req.body.type
-        }, (err, media) => {
-          Media.findOne({
+  if (req.body.category === 'fun' || req.body.category === 'education') {
+    Media.findOne({
+      _id: req.query.id
+    })
+      .then(media => {
+        if (req.user._id.toString() === media.userId.toString() || req.user.isAdmin) {
+          Media.findOneAndUpdate({
             _id: req.query.id
-          }).then(media => {
-            res.status(200);
-            res.send(media);
-          }).catch((err) => {
-            console.error(err);
+          }, {
+            title: req.body.title,
+            description: req.body.description,
+            category: req.body.category
+          }, (err, media) => {
+            Media.findOne({
+              _id: req.query.id
+            }).then(media => {
+              res.status(200);
+              res.send(media);
+            }).catch((err) => {
+              console.error(err);
+            });
           });
-        });
-      } else {
-        res.status(403);
-        res.send('sorry, you do not have access to update this content');
-      }
-    }).catch((err) => {
-      res.status(400);
-      res.send('bad request');
-    });
+        } else {
+          res.status(403);
+          res.send('sorry, you do not have access to update this content');
+        }
+      }).catch((err) => {
+        res.status(400);
+        res.send('bad request');
+      });
+  } else {
+    res.status(400);
+    res.send('Bad Request. Available categories: fun, education');
+  }
 });
 
 router.delete('/', bearerMiddlewear, function (req, res) {
