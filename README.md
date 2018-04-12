@@ -5,7 +5,8 @@
 **Version**: 1.1.0 Our first release of the KidCast application
 ***
 
-## Table of Content
+
+## Table of Contents
 * [Team Members](#Team-Members)
 * [Contributors](#Contributors)
 * [Overview](#Overview)
@@ -14,103 +15,137 @@
 * [User Stories](#User-Stories)
 ***
 
+
 ## Team Members
-* Amber Kim https://github.com/amgranad :innocent:
-* Brandon Buchholz https://github.com/bjbuchholz :neckbeard:
-* Eric Cobb https://github.com/sonsofdesert :wolf:
-* Ryan Johnson  https://github.com/rjtj2007 :evergreen_tree:
+* Amber Kim https://github.com/amgranad | https://www.linkedin.com/in/ambergkim/ :innocent:
+* Brandon Buchholz https://github.com/bjbuchholz | https://www.linkedin.com/in/brandonbuchholz/ :neckbeard:
+* Eric Cobb https://github.com/sonsofdesert | https://www.linkedin.com/in/eric-cobb/ :wolf:
+* Ryan Johnson  https://github.com/rjtj2007 | https://www.linkedin.com/in/ryan-johnson-95ab8a25/ :evergreen_tree:
 ***
 
-## Contributors
+
+## Contributors/Attribution
+* JB Tellez for Mongone.js
+* Steve Geluso and Jeff for the server toggle.
+* emailregex.com for the email regex validation.
 
 
 ## Overview
-A back-end server that contains kid centered, safe, searchable, parent-approved video content for kids.
+A back-end server and API that contains kid centered, safe, searchable, parent-approved video content for kids.
 ***
+
 
 ## Problem Domain
-There are a lot of resources for kids content like youtube that have video content, but it is not always parent approved. With kidcast the parent has control of the content that your kiddo is viewing and have peace of mind that it is safe and approved by the parents.
+There are a lot of resources for kids content like youtube that have video content, but it is not always parent approved. With kidcast the videos your child watches have to pass our KidCast Values. As a parent, you should have peace of mind that what your children are viewing are safe and approved by parents.
 ***
 
-## How to Use Our App
+
+## KitCast Values
+* We value kindness and respect at the utmost.
+* We uplift others through education and encouragement.
+***
+
+
+## How to Use Our API
 
 #### Sample POST Request to create a new user
 
-https://kidcast.herokuapp.com/api/signup
+`https://kidcast.herokuapp.com/api/signup`
+
+Sample Request JSON
 ``` json
-    {
+{
     "username": "<unique username>",
     "email": "<unique email address>",
     "password": "<password>"
-    }
-
-    RETURN
-    {
-    "_id": "<hashed user id>",
-    "username": "<username>",
-    "email": "<email address>",
-    "password": "<hashed password>",
-    "__v": 0
-    }
+}
 ```
---> assigns a *basic authorization* id and hashed password to a new user
+Sample JSON that is returned.
+```
+{
+    "message": "Account has been successfully created",
+    "isAdmin": false,
+    "username": "newUsername",
+    "email": "email@email.com"
+}
+```
+--> Assigns a *basic authorization* id and hashed password to a new user.
 
-**Proceede to Sign In**
+--> Usernames and passwords have to be unique.
 
-https://kidcast.herokuapp.com/api/signin
 
-    sign in using your unique username, email and password
+#### Sample GET Request to sign in
 
---> return *bearer authorization* token to user
+`https://kidcast.herokuapp.com/api/signin`
 
-#### Sample POST request to create new media content
-https://kidcast.herokuapp.com/api/media
+```
+   Authorization Basic dXNlcjpwYXNzd29yZA==
+```
+--> returns *bearer authorization* token
+
+
+#### Sample POST request to upload new media content
+
+`https://kidcast.herokuapp.com/api/media`
+
+```
+    Authorization Bearer aslkdjflskdjflksjlTOKENSAMPLE
+```
 
 **input required key/value pairs**
+Your movie file should be entered as form data and your POST details as fields.
 ```
     media <file to be uploaded>
     title <file title>
     description <file description>
     category <choose fun or education>
-
-    SEND
 ```
-    
---> uploads the new file to the database
+--> Uploads the new file to the database.
+
+--> Title and category is required.
+
+--> Category must either be 'fun' or 'education'
+
+--> Your post will be automatically set to public and will not be publicly available until a KidCast administrator approves your content.
+
 
 #### Sample GET ALL request
+Only resources set to public will be available. If your resource does not show up, it's still in the queue to be approved.
 
-https://kidcast.herokuapp.com/api/media
+`https://kidcast.herokuapp.com/api/media`
 
 RETURNS ALL available public media resources
 
-```json
 Single sample return
-
+```json
+[
     {
-    "public": <true or false>,
-    "_id": "<hashed content id>",
-    "title": "<media title>",
-    "description": "<media description>",
-    "mediaUrl": "<media url>",
-    "userId": "<hashed user id>",
-    "category": "<media category>",
-    "type": "<video>",
-    "__v": 0
-    },
+        "public": true,
+       "_id": "<hashed content id>",
+        "title": "<media title>",
+        "description": "<media description>",
+        "mediaUrl": "<media url>",
+        "userId": "<hashed user id>",
+        "category": "<media category>",
+       "type": "<video>",
+        "__v": 0
+    }
+],
 ```
+
 
 #### Sample GET ONE request
 
-https://kidcast.herokuapp.com/api/media?id=<_id>
+`https://kidcast.herokuapp.com/api/media?id=<_id>`
+
+Where '<_id>' is the resource id of the video you want to find.
 
 RETURNS ONE media resource
 
-```json
 Single sample return
-
-    {
-    "public": <true or false>,
+```json
+{
+    "public": true,
     "_id": "<hashed content id>",
     "title": "<media title>",
     "description": "<media description>",
@@ -119,17 +154,64 @@ Single sample return
     "category": "<media category>",
     "type": "<video>",
     "__v": 0
-    },
+}
 ```
+
+#### Available filters for GET requests
+
+Available Categories: 'fun', and 'education'
+`https://kidcast.herokuapp.com/api/media?category=<category>`
+
+Filtering By creator/user
+`https://kidcast.herokuapp.com/api/media?userId=<userId>`
+
 
 #### Sample PUT request to update existing media
 
-https://kidcast.herokuapp.com/api/media?id=<_id>
+`https://kidcast.herokuapp.com/api/media?id=<_id>`
+
+```
+    Authorization Bearer aslkdjflskdjflksjlTOKEN
+```
+Sample request body JSON
+``` json
+{
+    "title" : "This is my title",
+    "description" : "I love KidCast!",
+    "category" : "fun"
+}
+```
+Sample return body JSON
+```
+{
+    "type": "video",
+    "public": true,
+    "_id": "5ace6b6fc31b8e13551539e0",
+    "title": "yay!",
+    "description": "hello",
+    "mediaUrl": "https://kidcast1.s3.us-west-2.amazonaws.com/child-running-in-playground.mp4",
+    "userId": "5ace6b68c31b8e13551539df",
+    "category": "education",
+    "__v": 0
+}
+```
+--> The only categories available are 'fun' and 'education'
+
+--> Users may only UPDATE their own resources.
+
+--> Admin accounts are able to UPDATE all resources.
 
 
 #### Sample DELETE request to remove existing media
 
-https://kidcast.herokuapp.com/api/media?id=<_id>
+`https://kidcast.herokuapp.com/api/media?id=<_id>`
+
+Successful DELETE requests will return a status code of 204 No Content.
+
+--> Users may only DELETE their own resources.
+
+--> Admin accounts are able to DELETE all resources.
+***
 
 ## User Stories
 
