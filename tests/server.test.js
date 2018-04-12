@@ -694,7 +694,6 @@ describe('All Auth Tests', () => {
         });
     });
 
-
   }); // Media tests end.
 
   //make sure that test are testing data lines and functions vs response's

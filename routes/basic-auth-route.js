@@ -17,7 +17,7 @@ router.post('/signup', express.json(), (req, res) => {
   let emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   if (!emailRegex.test(req.body.email)) {
     res.status(400);
-    res.send('Invaid Email');
+    res.send('Invalid Email');
     return;
   }
   User.create(req.body)
