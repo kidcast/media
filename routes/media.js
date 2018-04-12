@@ -103,7 +103,7 @@ router.post('/', bearerMiddlewear, upload.single('media'), function (req, res) {
           });
       });
     } else {
-      res.status(404);
+      res.status(400);
       res.send('Bad Request. Please Only Upload mp4, mov, or m4v files');
     }
   } else {

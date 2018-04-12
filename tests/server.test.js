@@ -19,6 +19,8 @@ describe('All Auth Tests', () => {
 
   describe('Media Requests', () => {
 
+    // GET REQUESTS
+
     it('should return 200 for a GET request for all media resources', done => {
       //sign Up
       let signUpUrl = `http://localhost:${process.env.PORT}/api/signup`;
@@ -219,6 +221,8 @@ describe('All Auth Tests', () => {
         });
     });
 
+    // POST REQUESTS
+
     it('should return 200 for POST request to uploading a media resource and include proper AWS url', done => {
       //sign Up
       let signUpUrl = `http://localhost:${process.env.PORT}/api/signup`;
@@ -260,6 +264,50 @@ describe('All Auth Tests', () => {
                   let isAmazonUrl = res.body.mediaUrl.includes(amazonUrl);
                   expect(isAmazonUrl).toBe(true);
                   expect(res.status).toBe(200);
+                  done();
+                });
+            });
+        });
+    });
+
+    it('should return 400 for POST requests when trying to upload a non video file', done => {
+      //sign Up
+      let signUpUrl = `http://localhost:${process.env.PORT}/api/signup`;
+      let signUpBody = {
+        username: `randomUserTest${Math.random()}`,
+        password: `randomPasswordTest${Math.random()}`,
+        email: `${Math.random()}@email.com`
+      };
+      superagent.post(signUpUrl)
+        .auth(signUpBody.username, signUpBody.password)
+        .set('Content-Type', 'application/json')
+        .send(JSON.stringify(signUpBody))
+        .end((err, res) => {
+          let userId = res.body._id;
+          //Sign In
+          let signInUrl = `http://localhost:${process.env.PORT}/api/signin`;
+          superagent.get(signInUrl)
+            .auth(signUpBody.username, signUpBody.password)
+            .end((err, res) => {
+              let token = res.body.token;
+              let mediaLocation = './uploads/kidMusic.png';
+              let newMedia = {
+                title: `Test Title: ${Math.random()}`,
+                description: `Test Description: ${Math.random()}`,
+                category: `fun`,
+                userId: userId,
+              };
+              // post new media
+              let uploadUrl = `http://localhost:${process.env.PORT}/api/media`;
+              superagent.post(uploadUrl)
+                .field('title', newMedia.title)
+                .field('description', newMedia.description)
+                .field('category', newMedia.category)
+                .field('userId', userId)
+                .set('Authorization', 'Bearer ' + token)
+                .attach('media', mediaLocation)
+                .end((err, res) => {
+                  expect(res.status).toBe(400);
                   done();
                 });
             });
@@ -310,7 +358,9 @@ describe('All Auth Tests', () => {
         });
     });
 
-    it('should return 200 for updating a media resource\'s information', done => {
+    // PUT REQUESTS
+
+    it('should return 200 for PUT requests to update a media resource\'s information', done => {
       //sign Up
       let signUpUrl = `http://localhost:${process.env.PORT}/api/signup`;
       let signUpBody = {
@@ -491,6 +541,7 @@ describe('All Auth Tests', () => {
         });
     });
 
+    // DELETE REQUESTS
 
     it('should return 204 for deleting a resource', done => {
       //sign Up
