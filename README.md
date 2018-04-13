@@ -8,13 +8,13 @@
 
 ## Table of Contents
 * [Team Members](#Team-Members)
-* [Contributors](#Contributors)
+* [Contributors](#Contributors/Attribution)
 * [Overview](#Overview)
 * [Problem Domain](#Problem-Domain)
 * [Technologies Used](#Technologies-Used)
-* [How to Use Our App](#How-to-Use-Our-App)
+* [How to Use Our Api](#How-to-Use-Our-Api)
 * [User Stories](#User-Stories)
-***
+
 
 
 ## Team Members
@@ -26,8 +26,8 @@
 
 
 ## Contributors/Attribution
-* JB Tellez for Mongone.js
-* Steve Geluso and Jeff for the server toggle.
+* JB Tellez for Mongone.js :surfer:
+* Steve Geluso and Jeff for the server toggle. :bicyclist:
 * emailregex.com for the email regex validation.
 
 
