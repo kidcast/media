@@ -7,12 +7,12 @@
 
 
 ## Table of Contents
-* [Team Members](#Team-Members)
-* [Contributors](#Contributors/Attribution)
+* [Team Members](#TeamMembers)
+* [Contributors](#Contributorsattribution)
 * [Overview](#Overview)
-* [Problem Domain](#Problem-Domain)
-* [How to Use Our Api](#How-to-Use-Our-Api)
-* [User Stories](#User-Stories)
+* [Problem Domain](#ProblemDomain)
+* [How to Use Our Api](#HowtoUseOurApi)
+* [User Stories](#UserStories)
 ***
 
 
