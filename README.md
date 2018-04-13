@@ -13,7 +13,10 @@
 * [Problem Domain](#ProblemDomain)
 * [How to Use Our Api](#HowtoUseOurApi)
 * [User Stories](#UserStories)
-***
+* [Problem Domain](#ProblemDomain)
+* [Technologies Used](#TechnologiesUsed)
+* [How to Use Our Api](#HowtoUseOurApi)
+* [User Stories](#UserStories)
 
 
 ## Team Members
@@ -38,6 +41,23 @@ A back-end server and API that contains kid centered, safe, searchable, parent-a
 ## Problem Domain
 There are a lot of resources for kids content like youtube that have video content, but it is not always parent approved. With kidcast the videos your child watches have to pass our KidCast Values. As a parent, you should have peace of mind that what your children are viewing are safe and approved by parents.
 ***
+
+### Technologies Used
+* Javascript
+* Node.js
+* Express
+* MongoDB
+* Mongoose
+* AWS SDK
+* RESTful API
+* Heroku
+* Jest
+* Travis CI
+* Superagent
+* Multer
+* Basic and Bearer Authentication
+* Bcrypt 
+* JWT(json web token)
 
 
 ## KitCast Values
@@ -236,5 +256,6 @@ Successful DELETE requests will return a status code of 204 No Content.
  * As a developer, I want to create an interface that uses AWS s3 for keeping track of media uploads.
  * As a developer, I want to create an app where the user can upload videos and choose to be private (limited to their own account) or public viewing.
  * As a developer, I want to create a Public Viewing application where uploaded videos will be filtered before being posted. 
+
 
 
