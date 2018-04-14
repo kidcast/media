@@ -7,15 +7,20 @@
 
 
 ## Table of Contents
-* [Team Members](#Team-Members)
-* [Contributors](#Contributors/Attribution)
-* [Overview](#Overview)
-* [Problem Domain](#Problem-Domain)
-* [Technologies Used](#Technologies-Used)
-* [How to Use Our Api](#How-to-Use-Our-Api)
-* [User Stories](#User-Stories)
-
-
+* [Team Members](#team-members)
+* [Contributors](#contributors)
+* [Overview](#overview)
+* [Problem Domain](#problem-domain)
+* [How to Use Our Api](#how-to-use-our-api)
+    * [New User](#sample-post-request-to-create-a-new-user)
+    * [Sign In](#sample-get-request-to-sign-in)
+    * [Upload Content](#sample-post-request-to-upload-new-media-content)
+    * [GET All](#sample-get-all-request)
+    * [GET One](#sample-get-one-request)
+    * [Filters](#available-filters-for-get-requests)
+    * [Update](#sample-put-request-to-update-existing-media)
+    * [Delete](#sample-delete-request-to-remove-existing-media)
+* [User Stories](#user-stories)
 
 ## Team Members
 * Amber Kim https://github.com/amgranad | https://www.linkedin.com/in/ambergkim/ :innocent:
@@ -25,7 +30,7 @@
 ***
 
 
-## Contributors/Attribution
+## Contributors
 * JB Tellez for Mongone.js :surfer:
 * Steve Geluso and Jeff for the server toggle. :bicyclist:
 * emailregex.com for the email regex validation.
