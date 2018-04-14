@@ -9,7 +9,7 @@
 ## Table of Contents
 * [Team Members](#team-members)
 * [Contributors](#contributors)
-* [Overview](#Overview)
+* [Overview](#overview)
 * [Problem Domain](#problem-domain)
 * [How to Use Our Api](#how-to-use-our-api)
     * [New User](#sample-post-request-to-create-a-new-user)
