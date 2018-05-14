@@ -37,28 +37,14 @@ router.get('/', (req, res) => {
         res.send('Bad Request. Media Request is Pending Approval');
       }
     });
-  } else if (req.query.category) {
-    Media.find({category: req.query.category}, (err, media) => {
-      let publicMedia = media.filter(mediaItem => {
-        if (mediaItem.public) {
-          return mediaItem;
-        };
-      });
-      res.status(200);
-      res.send(publicMedia);
-    });
-  } else if (req.query.userId) {
-    Media.find({userId: req.query.userId}, (err, media) => {
-      let publicMedia = media.filter(mediaItem => {
-        if (mediaItem.public) {
-          return mediaItem;
-        };
-      });
-      res.status(200);
-      res.send(publicMedia);
-    });
   } else {
-    Media.find((err, media) => {
+    let params = {};
+    if (req.query.category) {
+      params = {category: req.query.category};
+    } else if (req.query.userId) {
+      params = {userId: req.query.userId};
+    };
+    Media.find(params, (err, media) => {
       let publicMedia = media.filter(mediaItem => {
         if (mediaItem.public) {
           return mediaItem;
